@@ -10,7 +10,6 @@ namespace SNMPManager.Core.Entities
 {
     public class RSU
     {
-        [Key]
         public int Id { get; set; }
         [Required]
         public IPAddress IP { get; set;}

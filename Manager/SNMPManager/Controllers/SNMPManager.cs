@@ -11,12 +11,12 @@ namespace SNMPManager.Controllers
     [ApiController]
     public class SNMPManager : ControllerBase
     {
-        private readonly IDatabaseService databaseService;
+        private readonly ISNMPManagerServices _SNMMPManagerService;
         private readonly ILogger logger;
 
-        public SNMPManager(IDatabaseService databaseService, ILogger logger)
+        public SNMPManager(ISNMPManagerServices databaseService, ILogger logger)
         {
-            this.databaseService = databaseService;
+            this._SNMMPManagerService = databaseService;
             this.logger = logger;
         }
 
