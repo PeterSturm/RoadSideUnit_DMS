@@ -2,6 +2,8 @@
 {
     public enum LogLevel
     {
-
+        DB,
+        SECURITY,
+        APICALL
     }
 }

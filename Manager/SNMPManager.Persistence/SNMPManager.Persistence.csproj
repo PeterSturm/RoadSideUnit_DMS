@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SNMPManager.Core\SNMPManager.Core.csproj" />
+    <ProjectReference Include="..\SNMPManager.Infrastructure\SNMPManager.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

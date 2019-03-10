@@ -9,9 +9,9 @@ namespace SNMPManager.Core.Interfaces
     public interface ISNMPManagerServices
     {
         // RSU service functions
-        void AddRSU(RSU rsu);
-        void RemoveRSU(int rsuId);
-        void UpdateRSU(RSU rsu);
+        bool AddRSU(RSU rsu);
+        bool RemoveRSU(int rsuId);
+        bool UpdateRSU(RSU rsu);
         RSU GetRSU(int rsuId);
         ICollection<RSU> GetRSU();
 
@@ -21,6 +21,15 @@ namespace SNMPManager.Core.Interfaces
         void UpdateUser(User user);
         User GetUser(int userId);
         ICollection<User> GetUser();
+        User AuthenticateUser(string userName, string token);
+        bool AuthorizeUser(string userName, string token, ManagerTask task);
+
+        // Role services functions
+        void AddRole(Role role);
+        void RemoveRole(int roleId);
+        void UpdateRole(Role role);
+        Role GetRole(int roleId);
+        ICollection<Role> GetRole();
 
         // Token service functions
         void AddToken(Token token);
@@ -28,6 +37,9 @@ namespace SNMPManager.Core.Interfaces
         void UpdateToken(Token token);
         Token GetToken(int tokenId);
         ICollection<Token> GetToken();
+
+        // SNMP manager service function
+
 
         // Log service functions
         void AddManagerLog(ManagerLog log);

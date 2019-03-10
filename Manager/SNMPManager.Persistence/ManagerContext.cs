@@ -12,16 +12,16 @@ namespace SNMPManager.Persistence
         public DbSet<RSU> RSUs { get; set; }
         public DbSet<ManagerLog> ManagerLogs { get; set; }
         public DbSet<TrapLog> TrapLogs { get; set; }
-        public DbSet<LogType> LogTypes { get; set; }
-        public DbSet<User> users { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public ManagerContext(DbContextOptions<ManagerContext> options) : base(options){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Setup composite keys for the log tables
-            modelBuilder.Entity<ManagerLog>().HasKey(log => new { log.TimeStamp, log.TypeId });
-            modelBuilder.Entity<TrapLog>().HasKey(log => new { log.TimeStamp, log.TypeId, log.SourceRSU});
+            modelBuilder.Entity<ManagerLog>().HasKey(log => new { log.TimeStamp, log.Type });
+            modelBuilder.Entity<TrapLog>().HasKey(log => new { log.TimeStamp, log.Type, log.SourceRSU});
 
             base.OnModelCreating(modelBuilder);
         }
