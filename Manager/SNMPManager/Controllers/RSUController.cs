@@ -14,10 +14,10 @@ namespace SNMPManager.Controllers
     [ApiController]
     public class RSUController : ControllerBase
     {
-        private readonly ISNMPManagerServices _SNMMPManagerService;
+        private readonly IContextService _SNMMPManagerService;
         private readonly ILogger _logger;
 
-        public RSUController(ISNMPManagerServices SNMPManagerService, ILogger logger)
+        public RSUController(IContextService SNMPManagerService, ILogger logger)
         {
             _SNMMPManagerService = SNMPManagerService;
             _logger = logger;

@@ -11,12 +11,12 @@ using SNMPManager.Infrastructure;
 
 namespace SNMPManager.Persistence
 {
-    public class SNMPManagerService : ISNMPManagerServices 
+    public class ContextService : IContextService 
     {
         private readonly ManagerContext _managerContext;
         private readonly ManagerLogger _logger;
 
-        public SNMPManagerService(ManagerContext managerContext)
+        public ContextService(ManagerContext managerContext)
         {
             _managerContext = managerContext;
             _logger = new ManagerLogger(this);
@@ -34,7 +34,6 @@ namespace SNMPManager.Persistence
             _managerContext.SaveChanges();
 
             return true;
-                
         }
 
         public RSU GetRSU(int rsuId)
@@ -72,29 +71,47 @@ namespace SNMPManager.Persistence
 
 
         #region User service functions
-        public void AddUser(User user)
+        public bool AddUser(User user)
         {
-            throw new NotImplementedException();
+            if (_managerContext.Users.Any(u=> u.Id == user.Id))
+                return false;
+
+            _managerContext.Add(user);
+            _managerContext.SaveChanges();
+
+            return true;
         }
 
         public User GetUser(int userId)
         {
-            throw new NotImplementedException();
+            return _managerContext.Users.Find(userId);
         }
 
         public ICollection<User> GetUser()
         {
-            throw new NotImplementedException();
+            return _managerContext.Users.ToArray();
         }
 
-        public void UpdateUser(User user)
+        public bool UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            var user_mod = _managerContext.RSUs.Find(user.Id);
+            if (user_mod == null)
+                return false;
+
+            _managerContext.Update(user);
+            _managerContext.SaveChanges();
+            return true;
         }
 
-        public void RemoveUser(int userId)
+        public bool RemoveUser(int userId)
         {
-            throw new NotImplementedException();
+            var user = _managerContext.RSUs.Find(userId);
+            if (user == null)
+                return false;
+
+            _managerContext.Remove(user);
+            _managerContext.SaveChanges();
+            return true;
         }
 
         public User AuthenticateUser(string userName, string token)
@@ -144,29 +161,47 @@ namespace SNMPManager.Persistence
         #endregion
 
         #region Role service functions
-        public void AddRole(Role role)
+        public bool AddRole(Role role)
         {
-            throw new NotImplementedException();
+            if (_managerContext.Roles.Any(r => r.Id == role.Id))
+                return false;
+
+            _managerContext.Add(role);
+            _managerContext.SaveChanges();
+
+            return true;
         }
 
-        public void RemoveRole(int roleId)
+        public bool RemoveRole(int roleId)
         {
-            throw new NotImplementedException();
+            var role = _managerContext.Roles.Find(roleId);
+            if (role == null)
+                return false;
+
+            _managerContext.Remove(role);
+            _managerContext.SaveChanges();
+            return true;
         }
 
-        public void UpdateRole(Role role)
+        public bool UpdateRole(Role role)
         {
-            throw new NotImplementedException();
+            var role_mod = _managerContext.Roles.Find(role.Id);
+            if (role_mod == null)
+                return false;
+
+            _managerContext.Update(role);
+            _managerContext.SaveChanges();
+            return true;
         }
 
         public Role GetRole(int roleId)
         {
-            throw new NotImplementedException();
+            return _managerContext.Roles.Find(roleId);
         }
 
         public ICollection<Role> GetRole()
         {
-            throw new NotImplementedException();
+            return _managerContext.Roles.ToArray();
         }
         #endregion
 
@@ -207,48 +242,69 @@ namespace SNMPManager.Persistence
 
         public void AddTrapLog(TrapLog log)
         {
-            throw new NotImplementedException();
+            _managerContext.Add(log);
+            _managerContext.SaveChanges();
         }
 
 
         public IEnumerable<ManagerLog> GetManagerLogs()
         {
-            throw new NotImplementedException();
+            return _managerContext.ManagerLogs.ToArray();
         }
 
         public IEnumerable<ManagerLog> GetManagerLogs(DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            return _managerContext.ManagerLogs
+                                    .Where( log => log.TimeStamp >= from
+                                                    && log.TimeStamp <= to)
+                                    .ToArray();
         }
 
         public IEnumerable<ManagerLog> GetManagerLogs(LogLevel logLevel, DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            return _managerContext.ManagerLogs
+                                    .Where(log => log.TimeStamp >= from
+                                                   && log.TimeStamp <= to
+                                                   && log.Type == logLevel)
+                                    .ToArray();
         }
 
         public IEnumerable<TrapLog> GetTrapLogs()
         {
-            throw new NotImplementedException();
+            return _managerContext.TrapLogs.ToArray();
         }
 
         public IEnumerable<TrapLog> GetTrapLogs(DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            return _managerContext.TrapLogs
+                                    .Where(log => log.TimeStamp >= from
+                                                   && log.TimeStamp <= to)
+                                    .ToArray();
         }
 
         public IEnumerable<TrapLog> GetTrapLogs(LogLevel logLevel, DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            return _managerContext.TrapLogs
+                                    .Where(log => log.TimeStamp >= from
+                                                   && log.TimeStamp <= to
+                                                   && log.Type == logLevel)
+                                    .ToArray();
         }
 
         public IEnumerable<TrapLog> GetTrapLogs(int rsuId, DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            return _managerContext.TrapLogs
+                                    .Where(log => log.TimeStamp >= from
+                                                   && log.TimeStamp <= to
+                                                   && log.SourceRSU == rsuId)
+                                    .ToArray();
         }
 
         public IEnumerable<TrapLog> GetTrapLogs(int rsuId)
         {
-            throw new NotImplementedException();
+            return _managerContext.TrapLogs
+                                    .Where(log => log.SourceRSU == rsuId)
+                                    .ToArray();
         }
 
         #endregion

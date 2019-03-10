@@ -37,7 +37,7 @@ namespace SNMPManager
 
             // Inject Custom logger and Databse handler services
             services.AddSingleton<Core.Interfaces.ILogger, ManagerLogger>();
-            services.AddSingleton<ISNMPManagerServices, SNMPManagerService>();          
+            services.AddSingleton<IContextService, ContextService>();          
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

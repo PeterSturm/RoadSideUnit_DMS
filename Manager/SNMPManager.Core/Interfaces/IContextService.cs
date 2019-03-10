@@ -6,7 +6,7 @@ using SNMPManager.Core.Enumerations;
 
 namespace SNMPManager.Core.Interfaces
 {
-    public interface ISNMPManagerServices
+    public interface IContextService
     {
         // RSU service functions
         bool AddRSU(RSU rsu);
@@ -16,18 +16,18 @@ namespace SNMPManager.Core.Interfaces
         ICollection<RSU> GetRSU();
 
         // User service functions
-        void AddUser(User user);
-        void RemoveUser(int userId);
-        void UpdateUser(User user);
+        bool AddUser(User user);
+        bool RemoveUser(int userId);
+        bool UpdateUser(User user);
         User GetUser(int userId);
         ICollection<User> GetUser();
         User AuthenticateUser(string userName, string token);
         bool AuthorizeUser(string userName, string token, ManagerTask task);
 
         // Role services functions
-        void AddRole(Role role);
-        void RemoveRole(int roleId);
-        void UpdateRole(Role role);
+        bool AddRole(Role role);
+        bool RemoveRole(int roleId);
+        bool UpdateRole(Role role);
         Role GetRole(int roleId);
         ICollection<Role> GetRole();
 

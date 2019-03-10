@@ -10,9 +10,9 @@ namespace SNMPManager.Infrastructure
 {
     public class ManagerLogger : ILogger
     {
-        private ISNMPManagerServices _SNMPManagerServices;
+        private IContextService _SNMPManagerServices;
 
-        public ManagerLogger(ISNMPManagerServices SNMPManagerServices)
+        public ManagerLogger(IContextService SNMPManagerServices)
         {
             _SNMPManagerServices = SNMPManagerServices;
         }
