@@ -1,23 +1,24 @@
 ﻿using SNMPManager.Core.Entities;
+using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
 using System;
 using System.Net;
 
 namespace SNMPManager.Infrastructure
 {
+    
+
     public class SNMPManagerService : ISNMPManagerService
     {
-        public void Get(RSU rsu, User user, string OID)
+        public MIBObject Get(RSU rsu, User user, string OID)
         {
             throw new NotImplementedException();
         }
 
-        public void Set(RSU rsu, User user, string OID, object value)
+        public bool Set(RSU rsu, User user, string OID, MIBObjectType type, object value)
         {
             throw new NotImplementedException();
         }
-
-
 
         public void AddSNMPUser(RSU rsu, User user)
         {
