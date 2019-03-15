@@ -69,7 +69,6 @@ namespace SNMPManager.Persistence
         }
         #endregion
 
-
         #region User service functions
         public bool AddUser(User user)
         {
@@ -232,6 +231,34 @@ namespace SNMPManager.Persistence
         }
         #endregion
 
+        #region ManagerSettings service functions
+        public bool AddManagerSettings(ManagerSettings settings)
+        {
+            if (_managerContext.ManagerSettings.Any())
+                return false;
+
+            _managerContext.Add(settings);
+            _managerContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool UpdateManagerSettings(ManagerSettings settings)
+        {
+            var settings_mod = _managerContext.ManagerSettings.First();
+            if (settings_mod == null)
+                return false;
+
+            _managerContext.Update(settings_mod);
+            _managerContext.SaveChanges();
+            return true;
+        }
+
+        public ManagerSettings GetManagerSettings()
+        {
+            return _managerContext.ManagerSettings.First();
+        }
+        #endregion
 
         #region Log service functions
         public void AddManagerLog(ManagerLog log)

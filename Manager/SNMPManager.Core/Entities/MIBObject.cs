@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Lextm.SharpSnmpLib;
 
 namespace SNMPManager.Core.Entities
 {
@@ -10,7 +11,7 @@ namespace SNMPManager.Core.Entities
     public class MIBObject
     {
         public string OID { get; set; }
-        public MIBObjectType Type { get; set; }
+        public SnmpType Type { get; set; }
         public object Value { get; set; }
     }
 }

@@ -38,12 +38,14 @@ namespace SNMPManager.Core.Interfaces
         Token GetToken(int tokenId);
         ICollection<Token> GetToken();
 
-        // SNMP manager service function
-
+        // SNMP manager settings service function
+        bool AddManagerSettings(ManagerSettings settings);
+        bool UpdateManagerSettings(ManagerSettings settings);
 
         // Log service functions
         void AddManagerLog(ManagerLog log);
         void AddTrapLog(TrapLog log);
+        ManagerSettings GetManagerSettings();
 
         IEnumerable<ManagerLog> GetManagerLogs();
         IEnumerable<TrapLog> GetTrapLogs();

@@ -14,6 +14,7 @@ namespace SNMPManager.Persistence
         public DbSet<TrapLog> TrapLogs { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<ManagerSettings> ManagerSettings{get; set;}
 
         public ManagerContext(DbContextOptions<ManagerContext> options) : base(options){}
 

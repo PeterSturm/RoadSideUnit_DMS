@@ -14,6 +14,8 @@ namespace SNMPManager.Core.Entities
         [Required]
         public IPAddress IP { get; set;}
         [Required]
+        public int Port { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public double Latitude { get; set; }

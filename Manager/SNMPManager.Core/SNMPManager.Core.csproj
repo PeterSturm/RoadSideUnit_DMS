@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Lextm.SharpSnmpLib" Version="11.1.0" />
+  </ItemGroup>
+
 </Project>

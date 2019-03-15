@@ -7,22 +7,19 @@ using SNMPManager.Core.Entities;
 using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Exceptions;
+using SNMPManager.WebAPI.Controllers;
 
 namespace SNMPManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RSUController : ControllerBase
+    public class RSUController : BaseController
     {
-        private readonly IContextService _SNMMPManagerService;
-        private readonly ILogger _logger;
-
-        public RSUController(IContextService SNMPManagerService, ILogger logger)
+        public RSUController(IContextService contextService, ILogger logger)
+            :base(contextService, logger)
         {
-            _SNMMPManagerService = SNMPManagerService;
-            _logger = logger;
-        }
 
+        }
         // GET api/values
         [HttpGet]
         [ProducesResponseType(200)]
@@ -37,7 +34,7 @@ namespace SNMPManager.Controllers
                 return securityProblem;
             */
 
-            var rsus = _SNMMPManagerService.GetRSU();
+            var rsus = _contextService.GetRSU();
             if (rsus == null)
                 return NotFound();
 
@@ -60,7 +57,7 @@ namespace SNMPManager.Controllers
                 return securityProblem;
             */
 
-            var rsu = _SNMMPManagerService.GetRSU(id);
+            var rsu = _contextService.GetRSU(id);
             if (rsu == null)
                 return NotFound(id);
 
@@ -85,7 +82,7 @@ namespace SNMPManager.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_SNMMPManagerService.AddRSU(rsu))
+            if (!_contextService.AddRSU(rsu))
                 return Conflict();
             else
             {
@@ -110,7 +107,7 @@ namespace SNMPManager.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_SNMMPManagerService.UpdateRSU(rsu))
+            if (!_contextService.UpdateRSU(rsu))
                 return NotFound(rsu);
             else
             {
@@ -131,25 +128,13 @@ namespace SNMPManager.Controllers
             if (securityProblem != null)
                 return securityProblem;
 
-            if (!_SNMMPManagerService.RemoveRSU(rsuid))
+            if (!_contextService.RemoveRSU(rsuid))
                 return NotFound(rsuid);
             else
             {
                 _logger.LogAPICall(username, ManagerTask.ADMINISTRATION, Operation.DELETE);
                 return Ok();
             }
-        }
-
-        private IActionResult AuthenticateAuthorize(string userName, string token)
-        {
-            try
-            {
-                _SNMMPManagerService.AuthorizeUser(userName, token, ManagerTask.ADMINISTRATION);
-            }
-            catch (AuthorizationFailed author) { return Unauthorized(author.Message); }
-            catch (AuthenticationFailed authen) { return Forbid(authen.Message); }
-
-            return null;
         }
     }
 }
