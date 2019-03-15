@@ -3,7 +3,7 @@ using System;
 
 namespace DashboardWebApp.Models
 {
-    public class User: IdentityUser
+    public class User : IdentityUser
     {
 
     }
