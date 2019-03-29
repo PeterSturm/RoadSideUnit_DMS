@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SNMPManager.Core.Enumerations;
@@ -11,9 +12,10 @@ using SNMPManager.Persistence;
 namespace SNMPManager.WebAPI.Migrations
 {
     [DbContext(typeof(ManagerContext))]
-    partial class ManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20190318184511_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,13 +47,6 @@ namespace SNMPManager.WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ManagerSettings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Timeout = 2000
-                        });
                 });
 
             modelBuilder.Entity("SNMPManager.Core.Entities.RSU", b =>
@@ -126,22 +121,6 @@ namespace SNMPManager.WebAPI.Migrations
                             NotificationIP = System.Net.IPAddress.Parse("186.56.123.84"),
                             NotificationPort = 161,
                             Port = 162
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = true,
-                            FirmwareVersion = "",
-                            IP = System.Net.IPAddress.Parse("127.0.0.1"),
-                            Latitude = 13.449999999999999,
-                            LocationDescription = "",
-                            Longitude = 32.119999999999997,
-                            MIBVersion = "",
-                            Manufacturer = "Commsignia",
-                            Name = "RSUjavaagent",
-                            NotificationIP = System.Net.IPAddress.Parse("127.0.0.1"),
-                            NotificationPort = 162,
-                            Port = 161
                         });
                 });
 

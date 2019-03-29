@@ -12,8 +12,8 @@ namespace SNMPManager.Core.Interfaces
     {
         void Configure(ManagerSettings settings);
 
-        IList<MIBObject> Get(RSU rsu, User user, string OID);
-        bool Set(RSU rsu, User user, string OID, SnmpType type, object value);
+        List<MIBObject> Get(RSU rsu, User user, string OID);
+        bool Set(RSU rsu, User user, string OID, SnmpType type, string value);
 
         void SetTrapListener(RSU rsu, IPAddress listenerIP, int listenerPort);
     }

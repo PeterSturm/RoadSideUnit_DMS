@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SNMPManager.Core.Entities;
 using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
-using SNMPManager.Core.Exceptions;
-using SNMPManager.WebAPI.Controllers;
 using SNMPManager.WebAPI.Models;
 
-namespace SNMPManager.Controllers
+namespace SNMPManager.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RSUController : BaseController
+    public class UserController : BaseController
     {
-        public RSUController(IContextService contextService, ILogger logger)
+        public UserController(IContextService contextService, ILogger logger)
             : base(contextService, logger)
         {
 
@@ -28,7 +26,7 @@ namespace SNMPManager.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public ActionResult<IEnumerable<RSUModel>> Get(string username, string token)
+        public ActionResult<IEnumerable<UserModel>> Get(string username, string token)
         {
 
             var securityProblem = AuthenticateAuthorize(username, token);
@@ -36,13 +34,13 @@ namespace SNMPManager.Controllers
                 return securityProblem;
 
 
-            var rsus = _contextService.GetRSU();
-            if (rsus == null)
+            var users = _contextService.GetUser();
+            if (users == null)
                 return NotFound();
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return rsus.Select(r => RSUModel.MaptoModel(r)).ToList();
+            return users.Select(u => UserModel.MapFromEntity(u)).ToList();
         }
 
         // GET api/values/5
@@ -51,7 +49,7 @@ namespace SNMPManager.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public ActionResult<RSUModel> Get(int id, string username, string token)
+        public ActionResult<UserModel> Get(int id, string username, string token)
         {
 
             var securityProblem = AuthenticateAuthorize(username, token);
@@ -59,13 +57,13 @@ namespace SNMPManager.Controllers
                 return securityProblem;
 
 
-            var rsu = _contextService.GetRSU(id);
-            if (rsu == null)
+            var user = _contextService.GetUser(id);
+            if (user == null)
                 return NotFound(id);
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return RSUModel.MaptoModel(rsu);
+            return UserModel.MapFromEntity(user);
         }
 
         // POST api/values
@@ -75,7 +73,7 @@ namespace SNMPManager.Controllers
         [ProducesResponseType(403)]
         [ProducesResponseType(409)]
         [ProducesResponseType(400)]
-        public IActionResult Post([FromBody] RSUModel rsu, string username, string token)
+        public IActionResult Post([FromBody] UserModel user, string username, string token)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
@@ -84,12 +82,12 @@ namespace SNMPManager.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_contextService.AddRSU(RSUModel.MaptoEntity(rsu)))
+            if (!_contextService.AddUser(UserModel.MaptoEntity(user)))
                 return Conflict();
             else
             {
                 _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
-                return Ok(rsu);
+                return Ok(user);
             }
         }
 
@@ -100,7 +98,7 @@ namespace SNMPManager.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(400)]
-        public IActionResult Put([FromBody] RSUModel rsu, string username, string token)
+        public IActionResult Put([FromBody] UserModel user, string username, string token)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
@@ -109,12 +107,12 @@ namespace SNMPManager.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_contextService.UpdateRSU(RSUModel.MaptoEntity(rsu)))
-                return NotFound(rsu);
+            if (!_contextService.UpdateUser(UserModel.MaptoEntity(user)))
+                return NotFound(user);
             else
             {
                 _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
-                return Ok(rsu);
+                return Ok(user);
             }
         }
 
@@ -124,14 +122,14 @@ namespace SNMPManager.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public IActionResult Delete(int rsuid, string username, string token)
+        public IActionResult Delete(int userid, string username, string token)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
                 return securityProblem;
 
-            if (!_contextService.RemoveRSU(rsuid))
-                return NotFound(rsuid);
+            if (!_contextService.RemoveUser(userid))
+                return NotFound(userid);
             else
             {
                 _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);

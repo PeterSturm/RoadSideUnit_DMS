@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SNMPManager.Core.Enumerations;
@@ -11,9 +12,10 @@ using SNMPManager.Persistence;
 namespace SNMPManager.WebAPI.Migrations
 {
     [DbContext(typeof(ManagerContext))]
-    partial class ManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20190328204559_SeedRSUforJavaAgent")]
+    partial class SeedRSUforJavaAgent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

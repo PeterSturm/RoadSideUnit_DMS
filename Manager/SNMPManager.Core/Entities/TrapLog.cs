@@ -10,5 +10,18 @@ namespace SNMPManager.Core.Entities
     public class TrapLog : Log
     {
         public int SourceRSU { get; set; }
+
+        public TrapLog()
+        {
+
+        }
+
+        public TrapLog(DateTime timestamp, LogType type, int rsu, string message)
+        {
+            TimeStamp = timestamp;
+            Type = type;
+            SourceRSU = rsu;
+            Message = message;
+        }
     }
 }

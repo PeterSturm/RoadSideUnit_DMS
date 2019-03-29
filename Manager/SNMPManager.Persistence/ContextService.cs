@@ -7,6 +7,7 @@ using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Exceptions;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore;
 using SNMPManager.Infrastructure;
 
 namespace SNMPManager.Persistence
@@ -38,17 +39,17 @@ namespace SNMPManager.Persistence
 
         public RSU GetRSU(int rsuId)
         {
-            return _managerContext.RSUs.Find(rsuId);
+            return _managerContext.RSUs.AsNoTracking().First(r => r.Id == rsuId);
         }
 
         public ICollection<RSU> GetRSU()
         {
-            return _managerContext.RSUs.ToArray();
+            return _managerContext.RSUs.AsNoTracking().ToArray();
         }
 
         public bool RemoveRSU(int rsuId)
         {
-            var rsu = _managerContext.RSUs.Find(rsuId);
+            var rsu = GetRSU(rsuId);
             if (rsu == null)
                 return false;
 
@@ -59,7 +60,7 @@ namespace SNMPManager.Persistence
 
         public bool UpdateRSU(RSU rsu)
         {
-            var rsu_mod = _managerContext.RSUs.Find(rsu.Id);
+            var rsu_mod = GetRSU(rsu.Id);
             if (rsu_mod == null)
                 return false;
 
@@ -83,7 +84,16 @@ namespace SNMPManager.Persistence
 
         public User GetUser(int userId)
         {
-            return _managerContext.Users.Find(userId);
+            return _managerContext.Users
+                .Include(u => u.Role)
+                .Single(u => u.Id == userId);
+        }
+
+        public User GetUser(string userName)
+        {
+            return _managerContext.Users
+                .Include(u => u.Role)
+                .Single(u => u.UserName == userName);
         }
 
         public ICollection<User> GetUser()
@@ -115,7 +125,7 @@ namespace SNMPManager.Persistence
 
         public User AuthenticateUser(string userName, string token)
         {
-            var user = _managerContext.Users.Find(userName);
+            var user = GetUser(userName);
             if (user == null)
             {
                 _logger.LogAuthentication(userName, false);
@@ -132,29 +142,19 @@ namespace SNMPManager.Persistence
             return user;
         }
 
-        public bool AuthorizeUser(string userName, string token, ManagerTask task)
+        public bool AuthorizeUser(string userName, string token)
         {
             var user = AuthenticateUser(userName, token);
             if (user == null)
             {
-                _logger.LogAuthorization(userName, task, false);
+                _logger.LogAuthorization(userName, false);
                 return false;
             }
 
-            var managertasks = user.Role.ManagerTasks;
-            if (managertasks == null)
-            {
-                _logger.LogAuthorization(userName, task, false);
-                throw new AuthorizationFailed(userName, task);
-            }
+            // TODO Authorization with Roles and ManagerOperations
 
-            if (!managertasks.Any(t => t.ToString() == task.ToString()))
-            {
-                _logger.LogAuthorization(userName, task, false);
-                throw new AuthorizationFailed(userName, task);
-            }
 
-            _logger.LogAuthorization(userName, task, true);
+            _logger.LogAuthorization(userName, true);
             return true;
         }
         #endregion
@@ -287,7 +287,7 @@ namespace SNMPManager.Persistence
                                     .ToArray();
         }
 
-        public IEnumerable<ManagerLog> GetManagerLogs(LogLevel logLevel, DateTime from, DateTime to)
+        public IEnumerable<ManagerLog> GetManagerLogs(LogType logLevel, DateTime from, DateTime to)
         {
             return _managerContext.ManagerLogs
                                     .Where(log => log.TimeStamp >= from
@@ -309,7 +309,7 @@ namespace SNMPManager.Persistence
                                     .ToArray();
         }
 
-        public IEnumerable<TrapLog> GetTrapLogs(LogLevel logLevel, DateTime from, DateTime to)
+        public IEnumerable<TrapLog> GetTrapLogs(LogType logLevel, DateTime from, DateTime to)
         {
             return _managerContext.TrapLogs
                                     .Where(log => log.TimeStamp >= from

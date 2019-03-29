@@ -16,7 +16,7 @@ namespace SNMPManager.Infrastructure
         {
             _SNMPManagerServices = SNMPManagerServices;
         }
-        public void Log(LogLevel level, string message)
+        public void Log(LogType level, string message)
         {
             ManagerLog log = new ManagerLog
             {
@@ -28,27 +28,24 @@ namespace SNMPManager.Infrastructure
             _SNMPManagerServices.AddManagerLog(log);
         }
 
-        public void LogAPICall(string userName, ManagerTask managerTask, Operation Operation)
+        public void LogAPICall(string userName, ManagerOperation managerOperation)
         {
-            if (managerTask == ManagerTask.ADMINISTRATION)
-                Log(LogLevel.APICALL, $"{userName} requested {managerTask.ToString()} task with operation {Operation.ToString()}.");
-            else
-                Log(LogLevel.APICALL, $"{userName} requested {managerTask.ToString()} task.");
+            Log(LogType.APICALL, $"[{userName}] requested [{managerOperation.ToString()}] task.");
         }
 
         public void LogAuthentication(string userName, bool success)
         {
-            Log(LogLevel.SECURITY, $"Authentication for {userName} was {GetSuccessString(success)}!");
+            Log(LogType.SECURITY, $"Authentication for [{userName}] was [{GetSuccessString(success)}]!");
         }
 
-        public void LogAuthorization(string userName, ManagerTask task, bool success)
+        public void LogAuthorization(string userName, bool success)
         {
-            Log(LogLevel.SECURITY, $"Authorization for {userName} was {GetSuccessString(success)} because missing rights to {task.ToString()}!");
+            Log(LogType.SECURITY, $"Authorization for [{userName}] was [{GetSuccessString(success)}]!");
         }
 
-        public void LogDBOperation(string userName, Operation Operation)
+        public void LogDBOperation(string userName, DBOperation Operation)
         {
-            Log(LogLevel.DB, $"{Operation.ToString()} operation executed for {userName}.");
+            Log(LogType.DB, $"[{Operation.ToString()}] operation executed for [{userName}].");
         }
 
         private string GetSuccessString(bool success)

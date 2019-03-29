@@ -1,9 +1,10 @@
 ﻿namespace SNMPManager.Core.Enumerations
 {
-    public enum LogLevel
+    public enum LogType
     {
         DB,
         SECURITY,
-        APICALL
+        APICALL,
+        SNMP
     }
 }

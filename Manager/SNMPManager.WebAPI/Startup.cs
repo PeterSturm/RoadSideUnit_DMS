@@ -15,6 +15,7 @@ using SNMPManager.Core.Interfaces;
 using SNMPManager.Persistence;
 using SNMPManager.Infrastructure;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Hosting;
 
 namespace SNMPManager
 {
@@ -32,13 +33,16 @@ namespace SNMPManager
         {
             // Configure Entity Framework with use of postgreSQL
             services.AddEntityFrameworkNpgsql()
-                    .AddDbContext<ManagerContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ManagerDatabase")))
+                    .AddDbContext<ManagerContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ManagerDatabase"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
                     .BuildServiceProvider();
 
             // Inject Custom logger and Databse handler services
-            services.AddSingleton<Core.Interfaces.ILogger, ManagerLogger>();
-            services.AddSingleton<IContextService, ContextService>();
-            services.AddSingleton<ISNMPManagerService, SNMPManagerService>();
+            services.AddScoped<Core.Interfaces.ILogger, ManagerLogger>();
+            services.AddScoped<IContextService, ContextService>();
+            services.AddScoped<ISNMPManagerService, SNMPManagerService>();
+
+            // Registrate and configure the TrapListener
+            services.AddSingleton<IHostedService>(sp => new TrapListener(sp, "rsu", "trapauthpass01", "trapprivpass01"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -46,11 +50,13 @@ namespace SNMPManager
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "SNMPManager API", Version = "v1" });
+
+                c.DescribeAllEnumsAsStrings();
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {

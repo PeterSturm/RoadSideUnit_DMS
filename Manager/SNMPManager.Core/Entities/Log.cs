@@ -11,7 +11,7 @@ namespace SNMPManager.Core.Entities
     public abstract class Log
     {
         public DateTime TimeStamp { get; set; }
-        public LogLevel Type { get; set; }
+        public LogType Type { get; set; }
         public string Message { get; set; }
     }
 }

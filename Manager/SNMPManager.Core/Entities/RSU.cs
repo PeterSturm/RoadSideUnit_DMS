@@ -12,7 +12,7 @@ namespace SNMPManager.Core.Entities
     {
         public int Id { get; set; }
         [Required]
-        public IPAddress IP { get; set;}
+        public IPAddress IP { get; set; }
         [Required]
         public int Port { get; set; }
         [Required]

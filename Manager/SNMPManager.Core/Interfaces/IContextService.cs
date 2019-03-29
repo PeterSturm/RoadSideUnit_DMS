@@ -20,9 +20,10 @@ namespace SNMPManager.Core.Interfaces
         bool RemoveUser(int userId);
         bool UpdateUser(User user);
         User GetUser(int userId);
+        User GetUser(string userName);
         ICollection<User> GetUser();
         User AuthenticateUser(string userName, string token);
-        bool AuthorizeUser(string userName, string token, ManagerTask task);
+        bool AuthorizeUser(string userName, string token);
 
         // Role services functions
         bool AddRole(Role role);
@@ -51,8 +52,8 @@ namespace SNMPManager.Core.Interfaces
         IEnumerable<TrapLog> GetTrapLogs();
         IEnumerable<ManagerLog> GetManagerLogs(DateTime from, DateTime to);
         IEnumerable<TrapLog> GetTrapLogs(DateTime from, DateTime to);
-        IEnumerable<ManagerLog> GetManagerLogs(LogLevel logLevel, DateTime from, DateTime to);
-        IEnumerable<TrapLog> GetTrapLogs(LogLevel logLevel, DateTime from, DateTime to);
+        IEnumerable<ManagerLog> GetManagerLogs(LogType logLevel, DateTime from, DateTime to);
+        IEnumerable<TrapLog> GetTrapLogs(LogType logLevel, DateTime from, DateTime to);
         IEnumerable<TrapLog> GetTrapLogs(int rsuId, DateTime from, DateTime to);
         IEnumerable<TrapLog> GetTrapLogs(int rsuId);
 
