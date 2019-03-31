@@ -1,0 +1,32 @@
+﻿@page
+@using DashboardWebApp.Models;
+@model DashboardWebApp.Pages.RSUs.IndexModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>Rsu</h1>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <td>Name</td>
+            <td>IP</td>
+            <td>Port</td>
+            <td>Manager name</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rsu in Model.RSUs)
+        {
+            <tr>
+                <td>@rsu.Name</td>
+                <td>@rsu.IP.ToString()</td>
+                <td>@rsu.Port</td>
+                <td>@rsu.Manager.Name</td>
+            </tr>
+        }</tbody>
+</table>
+

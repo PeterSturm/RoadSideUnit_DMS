@@ -8,8 +8,8 @@ using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Entities;
 using Lextm.SharpSnmpLib.Security;
 using Lextm.SharpSnmpLib.Messaging;
-using System.Net;
 using Lextm.SharpSnmpLib;
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using SNMPManager.Core.Enumerations;
 using System.Linq;
@@ -18,7 +18,6 @@ namespace SNMPManager.Infrastructure
 {
     public class TrapListener : IHostedService
     {
-        private readonly IContextService _contextService;
         private readonly IServiceProvider _serviceProvider;
         private Listener listener;
         private readonly string userName;
@@ -37,10 +36,11 @@ namespace SNMPManager.Infrastructure
         {
             var users = new UserRegistry();
             users.Add(new OctetString(userName),
-            new DESPrivacyProvider(new OctetString(privPass), new SHA1AuthenticationProvider(new OctetString(authPass))));
+                      new DESPrivacyProvider(new OctetString(privPass), new SHA1AuthenticationProvider(new OctetString(authPass))));
             listener = new Listener { Users = users };
             listener.AddBinding(new IPEndPoint(IPAddress.Any, 162));
             listener.MessageReceived += MessageReceived;
+            listener.ExceptionRaised += ExceptionHandler;
             listener.StartAsync();
 
             return Task.CompletedTask;
@@ -51,6 +51,11 @@ namespace SNMPManager.Infrastructure
             listener.Stop();
 
             return Task.CompletedTask;
+        }
+
+        private void ExceptionHandler(object sender, ExceptionRaisedEventArgs e)
+        {
+            var message = e.Exception.Message;
         }
 
         private void MessageReceived(object sender, MessageReceivedEventArgs e)
@@ -67,7 +72,16 @@ namespace SNMPManager.Infrastructure
 
                 try
                 {
-                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), e.Message.Scope.Pdu.Variables[0].Data.ToString()));
+                    if (e.Message.Scope.Pdu.Variables.Count == 0)
+                        contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), "Heartbeat ping"));
+
+                    /*if (e.Message.Scope.Pdu.TypeCode == SnmpType.TrapV2Pdu)
+                    {
+                        TrapV2Pdu v2trap = (TrapV2Pdu) e.Message.Scope.Pdu;
+                        var variables = v2trap.Variables.ToList();
+                        //contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), v2trap.Variables..ToString()));
+                    }*/
+
                 }
                 catch(Exception ex)
                 {

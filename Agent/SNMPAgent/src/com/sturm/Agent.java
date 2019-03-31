@@ -30,6 +30,7 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -45,13 +46,15 @@ public class Agent  extends BaseAgent {
     private OctetString trapPriv;
     private UserTarget target;
     private Snmp4jHeartbeatMib heartbeatMIB;
+    private OctetString localEngineID;
 
     public Agent(File bootCounterFile, File configFile)
     {
         super(bootCounterFile, configFile,
-                new CommandProcessor(new OctetString(MPv3.createLocalEngineID())));
+                new CommandProcessor((new OctetString(MPv3.createLocalEngineID()).substring(0,9))));
         SecurityProtocols.getInstance().addPrivacyProtocol(new PrivAES256With3DESKeyExtension());
 
+        localEngineID = agent.getContextEngineID();
     }
 
     public void start(String address, String trapAddress, String trapusername, String trapaut, String trappriv)
@@ -98,15 +101,20 @@ public class Agent  extends BaseAgent {
         target.setSecurityLevel(SecurityLevel.AUTH_PRIV);
         target.setSecurityName(trapUserName);
         target.setAddress(new UdpAddress(trapListenerAddress));
+        session.setLocalEngine(localEngineID.getValue(), 0, 0);
     }
 
     public void sendTrap()
     {
         ScopedPDU pdu = new ScopedPDU();
         pdu.setType(PDU.TRAP);
-        pdu.setContextEngineID(agent.getContextEngineID());
-        pdu.add(new VariableBinding(SnmpConstants.sysUpTime, new TimeTicks(1)));
+        pdu.setContextEngineID(localEngineID);
+        pdu.add(new VariableBinding(SnmpConstants.sysUpTime, new TimeTicks(5632)));
         pdu.add(new VariableBinding(SnmpConstants.snmpTrapOID, new OID(".1.3.6.1.2.1.1.8")));
+        //Collection<ManagedObject> mos = server.getRegistry().values();
+        /*pdu.add(new VariableBinding(new OID(heartbeatMIB.oidSnmp4jAgentHBRefTime), heartbeatMIB.getSnmp4jAgentHBCtrlEntry().getValue(new OID(heartbeatMIB.oidSnmp4jAgentHBRefTime))));
+        ManagedObject mo = server.getManagedObject(new OID("1.3.6.1.2.1.2.2.1"), null);*/
+
         try {
             session.send(pdu, target);
         } catch (IOException e) {

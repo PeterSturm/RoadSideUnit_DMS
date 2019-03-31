@@ -9,6 +9,8 @@ using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Exceptions;
 using SNMPManager.WebAPI.Controllers;
 using SNMPManager.WebAPI.Models;
+using DTO;
+using System.Net;
 
 namespace SNMPManager.Controllers
 {
@@ -22,13 +24,12 @@ namespace SNMPManager.Controllers
 
         }
 
-        // GET api/values
-        [HttpGet]
+        [HttpGet("{username}/{token}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public ActionResult<IEnumerable<RSUModel>> Get(string username, string token)
+        public ActionResult<IEnumerable<RsuDto>> Get(string username, string token)
         {
 
             var securityProblem = AuthenticateAuthorize(username, token);
@@ -42,16 +43,29 @@ namespace SNMPManager.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return rsus.Select(r => RSUModel.MaptoModel(r)).ToList();
+            return rsus.Select(r => new RsuDto {
+                Id = r.Id,
+                Ip = r.IP.ToString(),
+                Port = r.Port,
+                Name = r.Name,
+                Latitude = r.Latitude,
+                Longitude = r.Longitude,
+                Active = r.Active,
+                MibVersion = r.MIBVersion,
+                FirmwareVersion = r.FirmwareVersion,
+                LocationDescription = r.LocationDescription,
+                Manufacturer = r.Manufacturer,
+                NotificationIp = r.NotificationIP.ToString(),
+                NotificationPort = r.NotificationPort
+            }).ToList();
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{username}/{token}/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public ActionResult<RSUModel> Get(int id, string username, string token)
+        public ActionResult<RsuDto> Get(string username, string token, int id)
         {
 
             var securityProblem = AuthenticateAuthorize(username, token);
@@ -65,17 +79,70 @@ namespace SNMPManager.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return RSUModel.MaptoModel(rsu);
+            return new RsuDto
+            {
+                Id = rsu.Id,
+                Ip = rsu.IP.ToString(),
+                Port = rsu.Port,
+                Name = rsu.Name,
+                Latitude = rsu.Latitude,
+                Longitude = rsu.Longitude,
+                Active = rsu.Active,
+                MibVersion = rsu.MIBVersion,
+                FirmwareVersion = rsu.FirmwareVersion,
+                LocationDescription = rsu.LocationDescription,
+                Manufacturer = rsu.Manufacturer,
+                NotificationIp = rsu.NotificationIP.ToString(),
+                NotificationPort = rsu.NotificationPort
+            };
         }
 
-        // POST api/values
-        [HttpPost]
+        [HttpGet("{username}/{token}/{ip}/{port}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public ActionResult<IEnumerable<RsuDto>> Get(string username, string token, string ip, int port)
+        {
+
+            var securityProblem = AuthenticateAuthorize(username, token);
+            if (securityProblem != null)
+                return securityProblem;
+
+
+            var rsus = _contextService.GetRSU()
+                .Where(r => r.IP.ToString() == ip
+                           && r.Port == port);
+            if (rsus == null)
+                return NotFound();
+
+            _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
+
+            return rsus.Select(r => new RsuDto
+            {
+                Id = r.Id,
+                Ip = r.IP.ToString(),
+                Port = r.Port,
+                Name = r.Name,
+                Latitude = r.Latitude,
+                Longitude = r.Longitude,
+                Active = r.Active,
+                MibVersion = r.MIBVersion,
+                FirmwareVersion = r.FirmwareVersion,
+                LocationDescription = r.LocationDescription,
+                Manufacturer = r.Manufacturer,
+                NotificationIp = r.NotificationIP.ToString(),
+                NotificationPort = r.NotificationPort
+            }).ToList();
+        }
+
+        [HttpPost("{username}/{token}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(409)]
         [ProducesResponseType(400)]
-        public IActionResult Post([FromBody] RSUModel rsu, string username, string token)
+        public IActionResult Post(string username, string token, [FromBody] RsuDto rsu)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
@@ -84,7 +151,22 @@ namespace SNMPManager.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_contextService.AddRSU(RSUModel.MaptoEntity(rsu)))
+            if (!_contextService.AddRSU(new RSU
+            {
+                Id = rsu.Id,
+                IP = IPAddress.Parse(rsu.Ip),
+                Port = rsu.Port,
+                Name = rsu.Name,
+                Latitude = rsu.Latitude,
+                Longitude = rsu.Longitude,
+                Active = rsu.Active,
+                MIBVersion = rsu.MibVersion,
+                FirmwareVersion = rsu.FirmwareVersion,
+                LocationDescription = rsu.LocationDescription,
+                Manufacturer = rsu.Manufacturer,
+                NotificationIP = IPAddress.Parse(rsu.NotificationIp),
+                NotificationPort = rsu.NotificationPort
+            }))
                 return Conflict();
             else
             {
@@ -93,14 +175,13 @@ namespace SNMPManager.Controllers
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("{username}/{token}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(400)]
-        public IActionResult Put([FromBody] RSUModel rsu, string username, string token)
+        public IActionResult Put(string username, string token, [FromBody] RsuDto rsu)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
@@ -109,7 +190,22 @@ namespace SNMPManager.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_contextService.UpdateRSU(RSUModel.MaptoEntity(rsu)))
+            if (!_contextService.UpdateRSU(new RSU
+            {
+                Id = rsu.Id,
+                IP = IPAddress.Parse(rsu.Ip),
+                Port = rsu.Port,
+                Name = rsu.Name,
+                Latitude = rsu.Latitude,
+                Longitude = rsu.Longitude,
+                Active = rsu.Active,
+                MIBVersion = rsu.MibVersion,
+                FirmwareVersion = rsu.FirmwareVersion,
+                LocationDescription = rsu.LocationDescription,
+                Manufacturer = rsu.Manufacturer,
+                NotificationIP = IPAddress.Parse(rsu.NotificationIp),
+                NotificationPort = rsu.NotificationPort
+            }))
                 return NotFound(rsu);
             else
             {
@@ -118,13 +214,12 @@ namespace SNMPManager.Controllers
             }
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{username}/{token}/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public IActionResult Delete(int rsuid, string username, string token)
+        public IActionResult Delete(string username, string token, int rsuid)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)

@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using DashboardWebApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DashboardWebApp.WebApiClients;
+using DashboardWebApp.Models;
 
 namespace DashboardWebApp
 {
@@ -35,13 +37,18 @@ namespace DashboardWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            /*services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+                    Configuration.GetConnectionString("DefaultConnection")));*/
+            services.AddEntityFrameworkNpgsql()
+                .AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DashboardDatabase")))
+                .BuildServiceProvider();
+
+            services.AddDefaultIdentity<User>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddHttpClient<IRSUService, RSUService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
