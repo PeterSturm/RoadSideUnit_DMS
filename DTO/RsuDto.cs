@@ -13,7 +13,7 @@ namespace DTO
         public int Id { get; set; }
 
         [JsonProperty("ip")]
-        public string Ip { get; set; }
+        public string IP { get; set; }
 
         [JsonProperty("port")]
         public int Port { get; set; }
@@ -31,7 +31,7 @@ namespace DTO
         public bool Active { get; set; }
 
         [JsonProperty("mibVersion")]
-        public string MibVersion { get; set; }
+        public string MIBVersion { get; set; }
 
         [JsonProperty("firmwareVersion")]
         public string FirmwareVersion { get; set; }
@@ -43,7 +43,7 @@ namespace DTO
         public string Manufacturer { get; set; }
 
         [JsonProperty("notificationIP")]
-        public string NotificationIp { get; set; }
+        public string NotificationIP { get; set; }
 
         [JsonProperty("notificationPort")]
         public int NotificationPort { get; set; }

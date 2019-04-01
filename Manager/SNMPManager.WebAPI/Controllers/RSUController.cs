@@ -45,17 +45,17 @@ namespace SNMPManager.Controllers
 
             return rsus.Select(r => new RsuDto {
                 Id = r.Id,
-                Ip = r.IP.ToString(),
+                IP = r.IP.ToString(),
                 Port = r.Port,
                 Name = r.Name,
                 Latitude = r.Latitude,
                 Longitude = r.Longitude,
                 Active = r.Active,
-                MibVersion = r.MIBVersion,
+                MIBVersion = r.MIBVersion,
                 FirmwareVersion = r.FirmwareVersion,
                 LocationDescription = r.LocationDescription,
                 Manufacturer = r.Manufacturer,
-                NotificationIp = r.NotificationIP.ToString(),
+                NotificationIP = r.NotificationIP.ToString(),
                 NotificationPort = r.NotificationPort
             }).ToList();
         }
@@ -82,17 +82,17 @@ namespace SNMPManager.Controllers
             return new RsuDto
             {
                 Id = rsu.Id,
-                Ip = rsu.IP.ToString(),
+                IP = rsu.IP.ToString(),
                 Port = rsu.Port,
                 Name = rsu.Name,
                 Latitude = rsu.Latitude,
                 Longitude = rsu.Longitude,
                 Active = rsu.Active,
-                MibVersion = rsu.MIBVersion,
+                MIBVersion = rsu.MIBVersion,
                 FirmwareVersion = rsu.FirmwareVersion,
                 LocationDescription = rsu.LocationDescription,
                 Manufacturer = rsu.Manufacturer,
-                NotificationIp = rsu.NotificationIP.ToString(),
+                NotificationIP = rsu.NotificationIP.ToString(),
                 NotificationPort = rsu.NotificationPort
             };
         }
@@ -121,17 +121,17 @@ namespace SNMPManager.Controllers
             return rsus.Select(r => new RsuDto
             {
                 Id = r.Id,
-                Ip = r.IP.ToString(),
+                IP = r.IP.ToString(),
                 Port = r.Port,
                 Name = r.Name,
                 Latitude = r.Latitude,
                 Longitude = r.Longitude,
                 Active = r.Active,
-                MibVersion = r.MIBVersion,
+                MIBVersion = r.MIBVersion,
                 FirmwareVersion = r.FirmwareVersion,
                 LocationDescription = r.LocationDescription,
                 Manufacturer = r.Manufacturer,
-                NotificationIp = r.NotificationIP.ToString(),
+                NotificationIP = r.NotificationIP.ToString(),
                 NotificationPort = r.NotificationPort
             }).ToList();
         }
@@ -154,17 +154,17 @@ namespace SNMPManager.Controllers
             if (!_contextService.AddRSU(new RSU
             {
                 Id = rsu.Id,
-                IP = IPAddress.Parse(rsu.Ip),
+                IP = IPAddress.Parse(rsu.IP),
                 Port = rsu.Port,
                 Name = rsu.Name,
                 Latitude = rsu.Latitude,
                 Longitude = rsu.Longitude,
                 Active = rsu.Active,
-                MIBVersion = rsu.MibVersion,
+                MIBVersion = rsu.MIBVersion,
                 FirmwareVersion = rsu.FirmwareVersion,
                 LocationDescription = rsu.LocationDescription,
                 Manufacturer = rsu.Manufacturer,
-                NotificationIP = IPAddress.Parse(rsu.NotificationIp),
+                NotificationIP = IPAddress.Parse(rsu.NotificationIP),
                 NotificationPort = rsu.NotificationPort
             }))
                 return Conflict();
@@ -193,17 +193,17 @@ namespace SNMPManager.Controllers
             if (!_contextService.UpdateRSU(new RSU
             {
                 Id = rsu.Id,
-                IP = IPAddress.Parse(rsu.Ip),
+                IP = IPAddress.Parse(rsu.IP),
                 Port = rsu.Port,
                 Name = rsu.Name,
                 Latitude = rsu.Latitude,
                 Longitude = rsu.Longitude,
                 Active = rsu.Active,
-                MIBVersion = rsu.MibVersion,
+                MIBVersion = rsu.MIBVersion,
                 FirmwareVersion = rsu.FirmwareVersion,
                 LocationDescription = rsu.LocationDescription,
                 Manufacturer = rsu.Manufacturer,
-                NotificationIP = IPAddress.Parse(rsu.NotificationIp),
+                NotificationIP = IPAddress.Parse(rsu.NotificationIP),
                 NotificationPort = rsu.NotificationPort
             }))
                 return NotFound(rsu);

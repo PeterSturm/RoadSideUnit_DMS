@@ -26,6 +26,9 @@
                 <td>@rsu.IP.ToString()</td>
                 <td>@rsu.Port</td>
                 <td>@rsu.Manager.Name</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a>
+                </td>
             </tr>
         }</tbody>
 </table>
