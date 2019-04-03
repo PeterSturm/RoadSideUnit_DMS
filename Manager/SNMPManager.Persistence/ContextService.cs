@@ -44,7 +44,7 @@ namespace SNMPManager.Persistence
 
         public ICollection<RSU> GetRSU()
         {
-            return _managerContext.RSUs.AsNoTracking().ToArray();
+            return _managerContext.RSUs./*AsNoTracking().*/ToArray();
         }
 
         public bool RemoveRSU(int rsuId)

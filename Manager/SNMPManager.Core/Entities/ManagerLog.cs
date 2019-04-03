@@ -9,5 +9,16 @@ namespace SNMPManager.Core.Entities
 {
     public class ManagerLog : Log
     {
+        public ManagerLog()
+        {
+                
+        }
+
+        public ManagerLog(DateTime timestamp, LogType type, string message)
+        {
+            TimeStamp = timestamp;
+            Type = type;
+            Message = message;
+        }
     }
 }

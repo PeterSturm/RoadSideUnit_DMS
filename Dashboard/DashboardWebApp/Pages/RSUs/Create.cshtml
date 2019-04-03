@@ -1,0 +1,71 @@
+﻿@page
+@model DashboardWebApp.Pages.RSUs.CreateModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>RSU</h4>
+<br />
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="row">
+        <div class="form-group">
+            <label asp-for="RSU.Name" class="custom-control-label"></label>
+            <input asp-for="RSU.Name" class="form-control" />
+            <span asp-validation-for="RSU.Name" danger=""></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RSU.IP" class="custom-control-label"></label>
+            <input asp-for="RSU._IP" class="form-control" />
+            <span asp-validation-for="RSU._IP" danger=""></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RSU.Port" class="custom-control-label"></label>
+            <input asp-for="RSU.Port" class="form-control" />
+            <span asp-validation-for="RSU.Port" danger=""></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RSU.Latitude" class="custom-control-label"></label>
+            <input asp-for="RSU.Latitude" class="form-control" />
+            <span asp-validation-for="RSU.Latitude" danger=""></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RSU.Longitude" class="custom-control-label"></label>
+            <input asp-for="RSU.Longitude" class="form-control" />
+            <span asp-validation-for="RSU.Longitude" danger=""></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RSU.LocationDescription" class="custom-control-label"></label>
+            <input asp-for="RSU.LocationDescription" class="form-control" />
+            <span asp-validation-for="RSU.LocationDescription" danger=""></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <label asp-for="RSU.NotificationIP" class="custom-control-label"></label>
+            <input asp-for="RSU._NotificationIP" class="form-control" />
+            <span asp-validation-for="RSU._NotificationIP" danger=""></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RSU.NotificationPort" class="custom-control-label"></label>
+            <input asp-for="RSU.NotificationPort" class="form-control" />
+            <span asp-validation-for="RSU.NotificationPort" danger=""></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RSU.ManagerId" class="custom-control-label"></label>
+            <select asp-for="RSU.ManagerId" asp-items="Model.Managers"  class="form-control" ></select>
+            <span asp-validation-for="RSU.ManagerId" danger=""></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn"/>
+        </div>
+    </div>
+</form>
+

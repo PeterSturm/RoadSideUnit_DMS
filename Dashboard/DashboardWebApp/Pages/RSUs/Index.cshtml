@@ -9,27 +9,38 @@
 
 <h1>Rsu</h1>
 
+<p>
+    <a asp-page="./Create">Create</a>
+</p>
+
 <table class="table">
     <thead class="thead-dark">
         <tr>
-            <td>Name</td>
-            <td>IP</td>
-            <td>Port</td>
-            <td>Manager name</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].Name)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].IP) / @Html.DisplayNameFor(model => model.RSUs[0].Port)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].Manager)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].Manager) @Html.DisplayNameFor(model => model.RSUs[0].Manager.IP) / @Html.DisplayNameFor(model => model.RSUs[0].Manager.Port)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].NotificationIP)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].Latitude)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].Longitude)</td>
         </tr>
     </thead>
     <tbody>
         @foreach (var rsu in Model.RSUs)
         {
-            <tr>
-                <td>@rsu.Name</td>
-                <td>@rsu.IP.ToString()</td>
-                <td>@rsu.Port</td>
-                <td>@rsu.Manager.Name</td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a>
-                </td>
-            </tr>
+        <tr>
+            <td>@rsu.Name</td>
+            <td>@rsu.IP.ToString() / @rsu.Port</td>
+            <td>@rsu.Manager.Name</td>
+            <td>@rsu.Manager.IP / @rsu.Manager.Port</td>
+            <td>@rsu.NotificationIP / @rsu.NotificationPort</td>
+            <td>@rsu.Latitude</td>
+            <td>@rsu.Longitude</td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a> |
+                <a asp-page="./Delete" asp-route-id="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">Delete</a>
+            </td>
+        </tr>
         }</tbody>
 </table>
 

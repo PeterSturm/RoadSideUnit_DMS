@@ -42,7 +42,12 @@ namespace SNMPManager
             services.AddScoped<ISNMPManagerService, SNMPManagerService>();
 
             // Registrate and configure the TrapListener
-            services.AddSingleton<IHostedService>(sp => new TrapListener(sp, "rsu", "trapauthpass01", "trapprivpass01"));
+            services.AddSingleton<IHostedService>(sp => new TrapListener(sp,
+                                                                         "rsu",
+                                                                         "trapauthpass01",
+                                                                         "trapprivpass01",
+                                                                         Configuration.GetValue<string>("TrapListener:IP"),
+                                                                         Configuration.GetValue<int>("TrapListener:Port")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

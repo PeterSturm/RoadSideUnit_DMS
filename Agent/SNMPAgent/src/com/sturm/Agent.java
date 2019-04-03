@@ -40,6 +40,7 @@ public class Agent  extends BaseAgent {
     private static final LogAdapter logger =
             LogFactory.getLogger(BaseAgent.class);
     public String address;
+    public int port;
     public String trapListenerAddress;
     private OctetString trapUserName;
     private OctetString trapAuth;
@@ -57,10 +58,12 @@ public class Agent  extends BaseAgent {
         localEngineID = agent.getContextEngineID();
     }
 
-    public void start(String address, String trapAddress, String trapusername, String trapaut, String trappriv)
+    public void start(String address, int port, String trapAddress, String trapusername, String trapaut, String trappriv)
     {
         if (address == null || address == "")
-            address = "127.0.0.1/161";
+            address = "127.0.0.1";
+
+        address += "/" + String.format("%d", port);
 
         trapListenerAddress = trapAddress;
         trapUserName = new OctetString(trapusername);
@@ -69,7 +72,6 @@ public class Agent  extends BaseAgent {
 
         try {
             this.address = address;
-
             init();
             configTrap();
             //agent.loadConfig(ImportModes.REPLACE_CREATE);
@@ -122,11 +124,18 @@ public class Agent  extends BaseAgent {
         }
     }
 
+    @Override
     protected void registerSnmpMIBs() {
         heartbeatMIB = new Snmp4jHeartbeatMib(super.getNotificationOriginator(),
                 new OctetString(),
                 super.snmpv2MIB.getSysUpTime());
         super.registerSnmpMIBs();
+    }
+
+    @Override
+    protected void initTransportMappings() throws IOException {
+        transportMappings = new DefaultUdpTransportMapping[] {
+                new DefaultUdpTransportMapping(new UdpAddress("0.0.0.0/"+ String.format("%d", port))) };
     }
 
     @Override

@@ -18,12 +18,7 @@ namespace SNMPManager.Infrastructure
         }
         public void Log(LogType level, string message)
         {
-            ManagerLog log = new ManagerLog
-            {
-                TimeStamp = DateTime.UtcNow,
-                Type = level,
-                Message = message
-            };
+            ManagerLog log = new ManagerLog(DateTime.UtcNow, level, message);
 
             _SNMPManagerServices.AddManagerLog(log);
         }

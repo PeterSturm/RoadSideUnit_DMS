@@ -23,13 +23,17 @@ namespace SNMPManager.Infrastructure
         private readonly string userName;
         private readonly string authPass;
         private readonly string privPass;
+        private readonly IPAddress ownIP;
+        private readonly int listenerPort;
 
-        public TrapListener(IServiceProvider serviceProvider, string username, string authpass, string privpass)
+        public TrapListener(IServiceProvider serviceProvider, string username, string authpass, string privpass, string ip, int port)
         {
             _serviceProvider = serviceProvider;
             userName = username;
             authPass = authpass;
             privPass = privpass;
+            ownIP = IPAddress.Parse(ip);
+            listenerPort = port;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -38,7 +42,7 @@ namespace SNMPManager.Infrastructure
             users.Add(new OctetString(userName),
                       new DESPrivacyProvider(new OctetString(privPass), new SHA1AuthenticationProvider(new OctetString(authPass))));
             listener = new Listener { Users = users };
-            listener.AddBinding(new IPEndPoint(IPAddress.Any, 162));
+            listener.AddBinding(new IPEndPoint(IPAddress.Any, listenerPort));
             listener.MessageReceived += MessageReceived;
             listener.ExceptionRaised += ExceptionHandler;
             listener.StartAsync();
@@ -64,8 +68,39 @@ namespace SNMPManager.Infrastructure
             {
                 var contextService = scope.ServiceProvider.GetRequiredService<IContextService>();
 
-                int? rsu = contextService.GetRSU().FirstOrDefault(r => r.IP.ToString() == e.Sender.Address.ToString()
+                int? rsu = contextService.GetRSU().SingleOrDefault(r => r.IP.ToString() == e.Sender.Address.ToString()
                                                                      && r.Port == e.Sender.Port)?.Id;
+
+                // Registrate new RSU +
+                if (!rsu.HasValue)
+                { 
+                    bool success = contextService.AddRSU(new RSU
+                                    {
+                                        Name = "Unnamed",
+                                        IP = e.Sender.Address,
+                                        Port = e.Sender.Port,
+                                        //Latitude = 0.0,
+                                        //Longitude = 0.0, 
+                                        Active = true,
+                                        MIBVersion = "unknown",
+                                        FirmwareVersion = "unknown",
+                                        LocationDescription = "unknown",
+                                        Manufacturer = "unknown",
+                                        NotificationIP = ownIP,
+                                        NotificationPort = listenerPort
+                                    });
+                    if (success)
+                    {
+                        rsu = contextService.GetRSU().Single(r => r.IP == e.Sender.Address && r.Port == e.Sender.Port).Id;
+                        contextService.AddManagerLog(new ManagerLog(DateTime.Now, LogType.DB, $"Registered new RSU with id: {rsu}"));
+                    }
+                    else
+                    {
+                        contextService.AddManagerLog(new ManagerLog(DateTime.Now, LogType.DB, $"Registering new RSU({e.Sender.Address.ToString()}/{e.Sender.Port}) failed"));
+                        return;
+                    }
+                }
+                // Registrate new RSU -
 
                 if (e.Message.Parameters.IsInvalid)
                     contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), "Invalid Trap mesage!"));
@@ -85,7 +120,7 @@ namespace SNMPManager.Infrastructure
                 }
                 catch(Exception ex)
                 {
-                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), "Error processing Trap message!"));
+                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), $"Error processing Trap message! {ex.Message.Take(250)}"));
                 }
             }
         }

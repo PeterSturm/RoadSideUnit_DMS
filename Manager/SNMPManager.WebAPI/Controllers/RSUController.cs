@@ -214,7 +214,7 @@ namespace SNMPManager.Controllers
             }
         }
 
-        [HttpDelete("{username}/{token}/{id}")]
+        [HttpDelete("{username}/{token}/{rsuid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
