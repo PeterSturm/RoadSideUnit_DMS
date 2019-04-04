@@ -23,7 +23,7 @@ namespace DashboardWebApp.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Manager>().HasKey(m => m.Id);
-            builder.Entity<Manager>().HasAlternateKey(m => new { m.IP, m.Port});
+            //builder.Entity<Manager>().HasAlternateKey(m => new { m.IP, m.Port});
 
             Seed(builder);
 

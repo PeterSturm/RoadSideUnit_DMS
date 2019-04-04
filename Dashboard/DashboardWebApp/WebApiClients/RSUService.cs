@@ -22,61 +22,101 @@ namespace DashboardWebApp.WebApiClients
         {
             var host = (manager.IP.ToString() == "127.0.0.1") ? "localhost" : manager.IP.ToString();
 
-            var result = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}");
-            var rsus = RsuDto.FromJsonCollection(result);
+            try
+            {
+                var result = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}");
+                var rsus = RsuDto.FromJsonCollection(result);
 
-            return rsus.Select(r => RSU.Parse(r, manager)).ToList();
+
+                return rsus.Select(r => RSU.Parse(r, manager)).ToList();
+            }
+            catch (HttpRequestException ex)
+            {
+                return null;
+            }
         }
 
         public async Task<RSU> GetAsync(Manager manager, User user, string IP, int port)
         {
             var host = (manager.IP.ToString() == "127.0.0.1") ? "localhost" : manager.IP.ToString();
 
-            var result = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{IP}/{port}");
-            var rsu = RsuDto.FromJson(result);
+            try
+            {
+                var result = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{IP}/{port}");
+                var rsu = RsuDto.FromJson(result);
 
-            return RSU.Parse(rsu, manager);
+                return RSU.Parse(rsu, manager);
+            }
+            catch (HttpRequestException ex)
+            {
+                return null;
+            }
         }
 
         public async Task<RSU> GetAsync(Manager manager, User user, int id)
         {
             var host = (manager.IP.ToString() == "127.0.0.1") ? "localhost" : manager.IP.ToString();
 
-            var result = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{id}");
-            var rsu = RsuDto.FromJson(result);
+            try
+            { 
+                var result = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{id}");
+                var rsu = RsuDto.FromJson(result);
 
-            return RSU.Parse(rsu, manager);
-            
+                return RSU.Parse(rsu, manager);
+            }
+            catch (HttpRequestException ex)
+            {
+                return null;
+            }
+
         }
 
-        public async Task AddRSUAsync(Manager manager, User user, RSU rsu)
+        public async Task<bool> AddRSUAsync(Manager manager, User user, RSU rsu)
         {
             var host = (manager.IP.ToString() == "127.0.0.1") ? "localhost" : manager.IP.ToString();
 
             RsuDto rsuDto = rsu.ConvertToRSUDto();
 
-            var result = await _httpClinet.PostAsJsonAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}", rsuDto);
+            try
+            {
+                var result = await _httpClinet.PostAsJsonAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}", rsuDto);
+
+                return true;
+            }
+            catch (HttpRequestException ex)
+            {
+                return false;
+            }
         }
 
-        public async Task UpdateRSUAsync(Manager manager, User user, RSU rsu)
+        public async Task<bool> UpdateRSUAsync(Manager manager, User user, RSU rsu)
         {
             var host = (manager.IP.ToString() == "127.0.0.1") ? "localhost" : manager.IP.ToString();
 
-
-            /*var getresult = await _httpClinet.GetStringAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{rsu.Id}");
-            var rsumod = RsuDto.FromJson(getresult);*/
-
-            
-
-
-            var result = await _httpClinet.PutAsJsonAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}", rsu.ConvertToRSUDto());
+            try
+            {
+                var result = await _httpClinet.PutAsJsonAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}", rsu.ConvertToRSUDto());
+                return true;
+            }
+            catch (HttpRequestException ex)
+            {
+                return false;
+            }
         }
 
-        public async Task DeleteRSUAsync(Manager manager, User user, int rsuId)
+        public async Task<bool> DeleteRSUAsync(Manager manager, User user, int rsuId)
         {
             var host = (manager.IP.ToString() == "127.0.0.1") ? "localhost" : manager.IP.ToString();
 
-            var result = await _httpClinet.DeleteAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{rsuId}");
+            try
+            {
+                var result = await _httpClinet.DeleteAsync($"http://{host}:{manager.Port}/api/rsu/{user.UserName}/{user.Token}/{rsuId}");
+                return true;
+            }
+            catch (HttpRequestException ex)
+            {
+                return false;
+            }
         }
     }
 }

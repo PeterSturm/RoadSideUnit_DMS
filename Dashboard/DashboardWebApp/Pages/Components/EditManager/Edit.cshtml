@@ -1,0 +1,24 @@
+﻿@model DashboardWebApp.ViewModels.Manager.ManagerEditModel
+
+@if (Model != null)
+{
+    <input type="hidden" asp-for="Id" />
+}
+
+<div class="form-group">
+    <label asp-for="Name" class="custom-control-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" danger=""></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="IP" class="custom-control-label"></label>
+    <input asp-for="ip" class="form-control" />
+    <span asp-validation-for="ip" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Port" class="custom-control-label"></label>
+    <input asp-for="Port" class="form-control" />
+    <span asp-validation-for="Port" class="text-danger"></span>
+</div>

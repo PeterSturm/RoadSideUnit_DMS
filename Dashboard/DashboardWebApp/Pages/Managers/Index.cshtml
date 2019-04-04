@@ -1,0 +1,39 @@
+﻿@page
+@using DashboardWebApp.Models;
+@model DashboardWebApp.Pages.Managers.IndexModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Managers</h1>
+
+<p>
+    <a asp-page="./Create">Create</a>
+</p>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Managers[0].Name)</td>
+            <td>@Html.DisplayNameFor(model => model.Managers[0].IP) / @Html.DisplayNameFor(model => model.Managers[0].Port)</td>
+            <td>RSUs</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var manager in Model.Managers)
+        {
+        <tr>
+            <td>@manager.Name</td>
+            <td>@manager.IP.ToString() / @manager.Port</td>
+            <td><a asp-page="../RSUs/Index" asp-route-managerId="@manager.Id">Rsus</a></td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@manager.Id">Edit</a> |
+                <a asp-page="./Delete" asp-route-id="@manager.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E5B9E6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{B50F1D11-1AF4-45CA-B25D-09E14980C802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clientTest", "clientTest\clientTest.csproj", "{D3F4D47A-CCD5-49F5-9B2A-96CE5659F54F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clientTest", "clientTest\clientTest.csproj", "{D3F4D47A-CCD5-49F5-9B2A-96CE5659F54F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

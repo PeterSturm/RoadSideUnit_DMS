@@ -80,11 +80,11 @@ namespace DashboardWebApp.Pages.RSUs
             if (prevManager.IP.ToString() != RSUEditM.ManagerIP || prevManager.Port != RSUEditM.ManagerPort)
             {
                 await _rsuService.DeleteRSUAsync(prevManager, user, RSUEditM.Id);
-                await _rsuService.AddRSUAsync(manager, user, RSUEditM.ConvertToRSU(manager));
+                await _rsuService.AddRSUAsync(manager, user, RSUEditM.MapToRSU(manager));
             }
             else
             {
-                await _rsuService.UpdateRSUAsync(manager, user, RSUEditM.ConvertToRSU(manager));
+                await _rsuService.UpdateRSUAsync(manager, user, RSUEditM.MapToRSU(manager));
             }
 
             return RedirectToPage("./Index");

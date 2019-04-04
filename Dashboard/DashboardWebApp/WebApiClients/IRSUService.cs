@@ -12,10 +12,10 @@ namespace DashboardWebApp.WebApiClients
         Task<RSU> GetAsync(Manager manager, User user,string IP, int port);
         Task<RSU> GetAsync(Manager manager, User user,int id);
 
-        Task AddRSUAsync(Manager manager, User user,RSU rsu);
+        Task<bool> AddRSUAsync(Manager manager, User user,RSU rsu);
 
-        Task UpdateRSUAsync(Manager manager, User user,RSU rsu);
+        Task<bool> UpdateRSUAsync(Manager manager, User user,RSU rsu);
 
-        Task DeleteRSUAsync(Manager manager, User user,int rsuId);
+        Task<bool> DeleteRSUAsync(Manager manager, User user,int rsuId);
     }
 }

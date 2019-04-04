@@ -33,7 +33,7 @@ namespace DashboardWebApp.ViewModels.RSU
         public string prevMIP { get; set; }
         public int prevMPort { get; set; }
 
-        public static RSUEditModel Parse(DashboardWebApp.Models.RSU rsu, Manager manager)
+        public static RSUEditModel Parse(DashboardWebApp.Models.RSU rsu, DashboardWebApp.Models.Manager manager)
         {
             return new RSUEditModel
             {
@@ -57,7 +57,7 @@ namespace DashboardWebApp.ViewModels.RSU
             };
         }
 
-        public DashboardWebApp.Models.RSU ConvertToRSU(Manager manager)
+        public DashboardWebApp.Models.RSU MapToRSU(DashboardWebApp.Models.Manager manager)
         {
             return new DashboardWebApp.Models.RSU {
                 Id = Id,
