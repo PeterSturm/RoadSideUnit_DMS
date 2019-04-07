@@ -20,7 +20,7 @@ namespace SNMPManager.WebAPI.Controllers
         }
         
         // GET api/values
-        [HttpGet]
+        [HttpGet("{username}/{token}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
@@ -39,10 +39,10 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
 
-        [HttpGet("{from}/{to}")]
+        [HttpGet("{username}/{token}/{from}/{to}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -69,10 +69,10 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
 
-        [HttpGet("{type}/{from}/{to}")]
+        [HttpGet("{username}/{token}/{type}/{from}/{to}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -99,10 +99,10 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
 
-        [HttpGet("{rsuid}/{from}/{to}")]
+        [HttpGet("{username}/{token}/{rsuid}/{from}/{to}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -129,10 +129,10 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
 
-        [HttpGet("{rsuid}")]
+        [HttpGet("{username}/{token}/{rsuid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -152,7 +152,7 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
     }
 }

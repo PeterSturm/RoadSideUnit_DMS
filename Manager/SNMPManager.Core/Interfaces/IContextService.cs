@@ -30,6 +30,7 @@ namespace SNMPManager.Core.Interfaces
         bool RemoveRole(int roleId);
         bool UpdateRole(Role role);
         Role GetRole(int roleId);
+        Role GetRole(string name);
         ICollection<Role> GetRole();
 
         // Token service functions

@@ -16,19 +16,21 @@ namespace DashboardWebApp.Pages.Managers
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly UserService _userService;
 
-        public CreateModel(ApplicationDbContext applicationDbContext)
+        public CreateModel(ApplicationDbContext applicationDbContext, UserService userService)
         {
             _applicationDbContext = applicationDbContext;
+            _userService = userService;
         }
 
         [BindProperty]
         public ManagerEditModel Manager { get; set; }
 
 
-        public async Task<IActionResult> OnGetAsync()
+        public void OnGet()
         {
-            return Page();
+            Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -36,7 +38,13 @@ namespace DashboardWebApp.Pages.Managers
             if (!ModelState.IsValid)
                 return Page();
 
-           Manager manager = Manager.MapToManager(null);
+            Manager manager = Manager.MapToManager(null);
+
+            var managerUsers = await _userService.GetAsync(new ManagerUser(manager));
+            if (managerUsers != null)
+                _applicationDbContext.ManagerUsers.AddRange(managerUsers);
+
+            manager.Users = managerUsers?.ToList();
 
             _applicationDbContext.Managers.Add(manager);
             await _applicationDbContext.SaveChangesAsync();

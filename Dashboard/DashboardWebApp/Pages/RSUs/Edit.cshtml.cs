@@ -16,10 +16,10 @@ namespace DashboardWebApp.Pages.RSUs
 {
     public class EditModel : PageModel
     {
-        private readonly IRSUService _rsuService;
+        private readonly RSUService _rsuService;
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public EditModel(IRSUService rsuService, ApplicationDbContext applicationDbContext)
+        public EditModel(RSUService rsuService, ApplicationDbContext applicationDbContext)
         {
             _rsuService = rsuService;
             _applicationDbContext = applicationDbContext;
@@ -46,7 +46,11 @@ namespace DashboardWebApp.Pages.RSUs
             if (manager == null)
                 return NotFound();
 
-            RSUEditM = RSUEditModel.Parse( await _rsuService.GetAsync(manager, user, id.Value), manager);
+            var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == managerId)?.ManagerUser;
+            if (managerUser == null)
+                NotFound($"There's no Manager User assigned to this User, with {manager.Name} Manager");
+
+            RSUEditM = RSUEditModel.Parse( await _rsuService.GetAsync(managerUser, id.Value), manager);
 
             if (RSUEditM == null)
                 return NotFound();
@@ -60,10 +64,6 @@ namespace DashboardWebApp.Pages.RSUs
                 return Page();
 
             var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
-            if (user == null)
-            {
-                // TODO finish 
-            }
 
             var prevManager = _applicationDbContext.Managers.FirstOrDefault(m => m.IP.ToString() == RSUEditM.prevMIP && m.Port == RSUEditM.prevMPort);
             if (prevManager == null)
@@ -79,12 +79,24 @@ namespace DashboardWebApp.Pages.RSUs
 
             if (prevManager.IP.ToString() != RSUEditM.ManagerIP || prevManager.Port != RSUEditM.ManagerPort)
             {
-                await _rsuService.DeleteRSUAsync(prevManager, user, RSUEditM.Id);
-                await _rsuService.AddRSUAsync(manager, user, RSUEditM.MapToRSU(manager));
+                var managerUserprev = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == prevManager.Id)?.ManagerUser;
+                if (managerUserprev == null)
+                    NotFound($"There's no Manager User assigned to this User, with {prevManager.Id} Manager");
+
+                var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == manager.Id)?.ManagerUser;
+                if (managerUser == null)
+                    NotFound($"There's no Manager User assigned to this User, with {manager.Name} Manager");
+
+                await _rsuService.DeleteAsync(managerUserprev, RSUEditM.Id);
+                await _rsuService.AddAsync(managerUser, RSUEditM.MapToRSUWithManager(manager));
             }
             else
             {
-                await _rsuService.UpdateRSUAsync(manager, user, RSUEditM.MapToRSU(manager));
+                var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == manager.Id)?.ManagerUser;
+                if (managerUser == null)
+                    NotFound($"There's no Manager User assigned to this User, with {manager.Name} Manager");
+
+                await _rsuService.UpdateAsync(managerUser, RSUEditM.MapToRSUWithManager(manager));
             }
 
             return RedirectToPage("./Index");

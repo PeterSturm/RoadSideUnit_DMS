@@ -7,6 +7,7 @@ using DashboardWebApp.Models;
 using DashboardWebApp.WebApiClients;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashboardWebApp.Pages.Managers
 {
@@ -28,7 +29,7 @@ namespace DashboardWebApp.Pages.Managers
                 return NotFound();
 
 
-            Manager = _applicationDbContext.Managers.FirstOrDefault(m => m.Id == id.Value);
+            Manager = await _applicationDbContext.Managers.FirstOrDefaultAsync(m => m.Id == id.Value);
             if (Manager == null)
                 return NotFound();
 

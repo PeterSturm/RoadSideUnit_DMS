@@ -1,0 +1,30 @@
+﻿@page
+@model DashboardWebApp.Pages.ManagerLogs.IndexModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Manager Logs</h1>
+<h2>@Model.Manager.Name (@Model.Manager.IP / @Model.Manager.Port)</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Timestamp</td>
+            <td>Type</td>
+            <td>Message</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model.ManagerLogs)
+        {
+        <tr>
+            <td>@log.TimeStamp</td>
+            <td>@log.Type</td>
+            <td>@log.Message</td>
+        </tr>
+        }
+    </tbody>
+</table>
+

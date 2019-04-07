@@ -11,5 +11,6 @@ namespace DashboardWebApp.Models
         public string Name { get; set; }
         public IPAddress IP { get; set; }
         public int Port { get; set; }
+        public List<ManagerUser> Users { get; set; }
     }
 }

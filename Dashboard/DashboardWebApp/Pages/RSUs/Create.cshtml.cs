@@ -9,15 +9,16 @@ using DashboardWebApp.WebApiClients;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashboardWebApp.Pages.RSUs
 {
     public class CreateModel : PageModel
     {
-        private readonly IRSUService _rsuService;
+        private readonly RSUService _rsuService;
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public CreateModel(IRSUService rsuService, ApplicationDbContext applicationDbContext)
+        public CreateModel(RSUService rsuService, ApplicationDbContext applicationDbContext)
         {
             _rsuService = rsuService;
             _applicationDbContext = applicationDbContext;
@@ -31,11 +32,11 @@ namespace DashboardWebApp.Pages.RSUs
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Managers = _applicationDbContext.Managers
+            Managers = await _applicationDbContext.Managers
                 .Select(m => new SelectListItem{
                     Value = m.Id.ToString(),
                     Text = $"{m.Name} {m.IP}/{m.Port}"})
-                .ToList();
+                .ToListAsync();
             Managers.Insert(0, new SelectListItem {  Value = "-1", Text = "Select" });
 
             return Page();
@@ -52,12 +53,12 @@ namespace DashboardWebApp.Pages.RSUs
                 return Page();
 
             var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
-            if (user == null)
-            {
-                // TODO finish 
-            }
 
-            await _rsuService.AddRSUAsync(RSU.Manager, user, RSU);
+            var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == RSU.ManagerId)?.ManagerUser;
+            if (managerUser == null)
+                return NotFound($"There's no Manager User assigned to this User, with {RSU.Manager.Name} Manager");
+
+            await _rsuService.AddAsync(managerUser, RSU);
 
             return RedirectToPage("./Index");
         }

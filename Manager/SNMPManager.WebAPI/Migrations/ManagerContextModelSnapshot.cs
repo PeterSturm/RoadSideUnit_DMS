@@ -17,7 +17,7 @@ namespace SNMPManager.WebAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:Enum:log_type", "db,security,apicall")
+                .HasAnnotation("Npgsql:Enum:log_type", "db,security,apicall,snmp")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
@@ -161,6 +161,11 @@ namespace SNMPManager.WebAPI.Migrations
                         {
                             Id = 1,
                             Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Monitor"
                         });
                 });
 
@@ -183,10 +188,6 @@ namespace SNMPManager.WebAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
 
                     b.Property<int?>("RoleId");
 
@@ -211,13 +212,20 @@ namespace SNMPManager.WebAPI.Migrations
                         new
                         {
                             Id = 1,
-                            FirstName = "Péter",
-                            LastName = "Sturm",
                             RoleId = 1,
                             SNMPv3Auth = "authpass012",
                             SNMPv3Priv = "privpass012",
-                            Token = "test",
-                            UserName = "sturm"
+                            Token = "Adminpass01",
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RoleId = 2,
+                            SNMPv3Auth = "authpass012",
+                            SNMPv3Priv = "privpass012",
+                            Token = "Monitorpass01",
+                            UserName = "monitor"
                         });
                 });
 

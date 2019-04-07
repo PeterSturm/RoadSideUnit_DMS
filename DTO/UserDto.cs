@@ -9,7 +9,7 @@ namespace DTO
     public partial class UserDto
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("userName")]
         public string UserName { get; set; }
@@ -19,12 +19,6 @@ namespace DTO
 
         [JsonProperty("role")]
         public string Role { get; set; }
-
-        [JsonProperty("lastName")]
-        public string LastName { get; set; }
-
-        [JsonProperty("firstName")]
-        public string FirstName { get; set; }
 
         [JsonProperty("snmPv3Auth")]
         public string SnmPv3Auth { get; set; }
@@ -36,6 +30,7 @@ namespace DTO
     public partial class UserDto
     {
         public static UserDto FromJson(string json) => JsonConvert.DeserializeObject<UserDto>(json, DTO.Converter.Settings);
+        public static IEnumerable<UserDto> FromJsonCollection(string json) => JsonConvert.DeserializeObject<IEnumerable<UserDto>>(json, DTO.Converter.Settings);
     }
 }
 

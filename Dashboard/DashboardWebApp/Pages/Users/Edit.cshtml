@@ -1,0 +1,78 @@
+﻿@page
+@model DashboardWebApp.Pages.Users.EditModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+<h2>@Model.User.UserName</h2>
+<br />
+<h4>Manager Users</h4>
+<br />
+<form method="post">
+    <label class="custom-control-label">Manager</label>
+    <select asp-for="@Model.AddManagerUser.ManagerUserManagerId" asp-items="@Model.AddManagerUser.Managers"></select>
+    <select asp-for="@Model.AddManagerUser.ManagerUserUserId"></select>
+    <input type="submit" value="Add" class="btn" />
+</form>
+<div class="row">
+    <div class="col-lg-12">
+        @if (Model.User.ManagerUsers != null && Model.User.ManagerUsers.Count != 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td><label asp-for="@Model.User.ManagerUsers[0].Manager"></label></td>
+                        <td><label asp-for="@Model.User.ManagerUsers[0].Manager.IP"></label></td>
+                        <td><label asp-for="@Model.User.ManagerUsers[0].Name"></label></td>
+                        <td><label asp-for="@Model.User.ManagerUsers[0].Role"></label></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var manageruser in Model.User.ManagerUsers)
+                    {
+                        <tr>
+                            <td>@manageruser.Manager.Name</td>
+                            <td>@manageruser.Manager.IP/@manageruser.Manager.Port</td>
+                            <td>@manageruser.Name</td>
+                            <td>@manageruser.Role</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@section Scripts{ 
+    <script type="text/javascript">
+        $("#AddManagerUser_ManagerUserManagerId").change(function () {
+            var selectedManager = $("#AddManagerUser_ManagerUserManagerId").val();
+            var managerUserSelect = $("#AddManagerUser_ManagerUserUserId");
+            managerUserSelect.empty();
+
+            $.ajax({
+                type: 'GET',
+                url: 'Edit?handler=ManagerUsers',
+                contentType: "application/json",
+                dataType: 'json',
+                data: {
+                    managerId: selectedManager},
+                success: function (response) {
+                    if (response != null && !jQuery.isEmptyObject(response)) {
+                        $.each(response, function (index, manageruser) {
+                            managerUserSelect.append($('<option/>', {
+                                value: manageruser.value,
+                                text: manageruser.text
+                            }));
+                        });
+                    }
+                },
+                failure: function (response) {
+                }
+            });
+        });
+    </script>
+}

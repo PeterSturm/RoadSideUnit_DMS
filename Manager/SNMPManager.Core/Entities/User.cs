@@ -11,8 +11,6 @@ namespace SNMPManager.Core.Entities
         public string UserName { get; set; }
         public string Token { get; set; }
         public Role Role { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
         public string SNMPv3Auth { get; set; }
         public string SNMPv3Priv { get; set; }
     }

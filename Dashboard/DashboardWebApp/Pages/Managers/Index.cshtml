@@ -17,7 +17,9 @@
         <tr>
             <td>@Html.DisplayNameFor(model => model.Managers[0].Name)</td>
             <td>@Html.DisplayNameFor(model => model.Managers[0].IP) / @Html.DisplayNameFor(model => model.Managers[0].Port)</td>
-            <td>RSUs</td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
         </tr>
     </thead>
@@ -28,6 +30,8 @@
             <td>@manager.Name</td>
             <td>@manager.IP.ToString() / @manager.Port</td>
             <td><a asp-page="../RSUs/Index" asp-route-managerId="@manager.Id">Rsus</a></td>
+            <td><a asp-page="../ManagerLogs/Index" asp-route-managerId="@manager.Id">Manager Logs</a></td>
+            <td><a asp-page="../TrapLogs/Index" asp-route-managerId="@manager.Id">Trap Logs</a></td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@manager.Id">Edit</a> |
                 <a asp-page="./Delete" asp-route-id="@manager.Id">Delete</a>

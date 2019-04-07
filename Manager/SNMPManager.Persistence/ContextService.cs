@@ -84,21 +84,23 @@ namespace SNMPManager.Persistence
 
         public User GetUser(int userId)
         {
-            return _managerContext.Users
+            return _managerContext.Users?
                 .Include(u => u.Role)
                 .Single(u => u.Id == userId);
         }
 
         public User GetUser(string userName)
         {
-            return _managerContext.Users
+            return _managerContext.Users?
                 .Include(u => u.Role)
                 .Single(u => u.UserName == userName);
         }
 
         public ICollection<User> GetUser()
         {
-            return _managerContext.Users.ToArray();
+            return _managerContext.Users
+                .Include(u => u.Role)
+                .ToArray();
         }
 
         public bool UpdateUser(User user)
@@ -196,6 +198,11 @@ namespace SNMPManager.Persistence
         public Role GetRole(int roleId)
         {
             return _managerContext.Roles.Find(roleId);
+        }
+
+        public Role GetRole(string name)
+        {
+            return _managerContext.Roles.FirstOrDefault(r => r.Name == name);
         }
 
         public ICollection<Role> GetRole()

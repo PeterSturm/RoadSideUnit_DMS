@@ -58,17 +58,31 @@ namespace SNMPManager.Persistence
                 new
                 {
                     Id = 1,
-                    Name = "Admin",
+                    Name = "Admin"
+                },
+                new
+                {
+                    Id = 2,
+                    Name = "Monitor"
                 });
 
             builder.Entity<User>().HasData(
-                new{
+                new
+                {
                     Id = 1,
-                    FirstName = "Péter",
-                    LastName = "Sturm",
-                    UserName = "sturm",
-                    Token = "test",
+                    UserName = "admin",
+                    Token = "Adminpass01",
                     RoleId = 1,
+                    SNMPv3Auth = "authpass012",
+                    SNMPv3Priv = "privpass012",
+
+                },
+                new
+                {
+                    Id = 2,
+                    UserName = "monitor",
+                    Token = "Monitorpass01",
+                    RoleId = 2,
                     SNMPv3Auth = "authpass012",
                     SNMPv3Priv = "privpass012",
 

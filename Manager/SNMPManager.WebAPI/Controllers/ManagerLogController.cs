@@ -20,7 +20,7 @@ namespace SNMPManager.WebAPI.Controllers
         }
         
         // GET api/values
-        [HttpGet]
+        [HttpGet("{username}/{token}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(401)]
@@ -39,10 +39,10 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
 
-        [HttpGet("{from}/{to}")]
+        [HttpGet("{username}/{token}/{from}/{to}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -58,6 +58,9 @@ namespace SNMPManager.WebAPI.Controllers
             if (!DateTime.TryParse(to, out dateto))
                 return BadRequest(to);
 
+            if (datefrom > dateto)
+                return BadRequest();
+
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
                 return securityProblem;
@@ -69,10 +72,10 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
 
-        [HttpGet("{type}/{from}/{to}")]
+        [HttpGet("{username}/{token}/{logtype}/{from}/{to}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -88,6 +91,9 @@ namespace SNMPManager.WebAPI.Controllers
             if (!DateTime.TryParse(to, out dateto))
                 return BadRequest(to);
 
+            if (datefrom > dateto)
+                return BadRequest();
+
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
                 return securityProblem;
@@ -99,7 +105,7 @@ namespace SNMPManager.WebAPI.Controllers
 
             _logger.LogAPICall(username, ManagerOperation.ADMINISTRATION);
 
-            return logs.ToList();
+            return logs.OrderByDescending(l => l.TimeStamp).ToList();
         }
     }
 }

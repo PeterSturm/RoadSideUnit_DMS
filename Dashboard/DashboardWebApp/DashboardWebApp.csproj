@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DTO\DTO.csproj" />
+    <ProjectReference Include="..\..\Manager\SNMPManager.Core\SNMPManager.Core.csproj" />
     <ProjectReference Include="..\DashboardWebApp.Models\DashboardWebApp.Models.csproj" />
   </ItemGroup>
 

@@ -57,7 +57,7 @@ namespace DashboardWebApp.ViewModels.RSU
             };
         }
 
-        public DashboardWebApp.Models.RSU MapToRSU(DashboardWebApp.Models.Manager manager)
+        public DashboardWebApp.Models.RSU MapToRSUWithManager(DashboardWebApp.Models.Manager manager)
         {
             return new DashboardWebApp.Models.RSU {
                 Id = Id,

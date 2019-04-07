@@ -8,7 +8,6 @@ using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Exceptions;
 using SNMPManager.WebAPI.Controllers;
-using SNMPManager.WebAPI.Models;
 using DTO;
 using System.Net;
 

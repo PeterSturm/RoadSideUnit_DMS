@@ -12,10 +12,10 @@ namespace DashboardWebApp.Pages.RSUs
 {
     public class DeleteModel : PageModel
     {
-        private readonly IRSUService _rsuService;
+        private readonly RSUService _rsuService;
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public DeleteModel(IRSUService rsuService, ApplicationDbContext applicationDbContext)
+        public DeleteModel(RSUService rsuService, ApplicationDbContext applicationDbContext)
         {
             _rsuService = rsuService;
             _applicationDbContext = applicationDbContext;
@@ -42,7 +42,11 @@ namespace DashboardWebApp.Pages.RSUs
             if (manager == null)
                 return NotFound();
 
-            RSU = await _rsuService.GetAsync(manager, user, id.Value);
+            var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == managerId)?.ManagerUser;
+            if (managerUser == null)
+                NotFound($"There's no Manager User assigned to this User, with {RSU.Manager.Name} Manager");
+
+            RSU = await _rsuService.GetAsync(managerUser, id.Value);
 
             if (RSU == null)
                 return NotFound();
@@ -68,12 +72,16 @@ namespace DashboardWebApp.Pages.RSUs
             if (manager == null)
                 return NotFound();
 
-            RSU = await _rsuService.GetAsync(manager, user, id.Value);
+            var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == managerId)?.ManagerUser;
+            if (managerUser == null)
+                return NotFound($"There's no Manager User assigned to this User, with {RSU.Manager.Name} Manager");
+
+            RSU = await _rsuService.GetAsync(managerUser, id.Value);
 
             if (RSU == null)
                 return NotFound();
             else
-                await _rsuService.DeleteRSUAsync(manager, user, id.Value);
+                await _rsuService.DeleteAsync(managerUser, id.Value);
 
 
             return RedirectToPage("./Index");

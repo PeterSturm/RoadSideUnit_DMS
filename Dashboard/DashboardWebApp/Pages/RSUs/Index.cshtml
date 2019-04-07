@@ -23,6 +23,8 @@
             <td>@Html.DisplayNameFor(model => model.RSUs[0].NotificationIP)</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Latitude)</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Longitude)</td>
+            <td></td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +38,7 @@
             <td>@rsu.NotificationIP / @rsu.NotificationPort</td>
             <td>@rsu.Latitude</td>
             <td>@rsu.Longitude</td>
+            <td><a asp-page="../TrapLogs/Index" asp-route-managerId="@rsu.Manager.Id" asp-route-rsuId="@rsu.Id">Trap Logs</a></td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a> |
                 <a asp-page="./Delete" asp-route-id="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">Delete</a>

@@ -12,6 +12,7 @@ namespace DashboardWebApp.ViewModels.Manager
             get { return IP.ToString(); }
             set { IP = IPAddress.Parse(value); }
         }
+        public List<ManagerUserEditModel> ManagerUserEditModels { get; set; }
 
         public static ManagerEditModel Parse(Models.Manager manager)
         {
@@ -20,7 +21,9 @@ namespace DashboardWebApp.ViewModels.Manager
                 Id = manager.Id,
                 Name = manager.Name,
                 IP = manager.IP,
-                Port = manager.Port
+                Port = manager.Port,
+                Users = manager.Users,
+                ManagerUserEditModels = manager.Users.Select(mu => new ManagerUserEditModel(mu)).ToList()
             };
         }
 
@@ -32,6 +35,7 @@ namespace DashboardWebApp.ViewModels.Manager
                 manager.Name = Name;
                 manager.IP = IP;
                 manager.Port = Port;
+                manager.Users = Users;
             }
             else
             {
@@ -39,7 +43,8 @@ namespace DashboardWebApp.ViewModels.Manager
                 {
                     Name = Name,
                     IP = IP,
-                    Port = Port
+                    Port = Port,
+                    Users = Users
                 };
             }
 

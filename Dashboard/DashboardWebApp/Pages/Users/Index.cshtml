@@ -1,0 +1,25 @@
+﻿@page
+@model DashboardWebApp.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Users</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td><label asp-for="@Model.Users[0].UserName"></label></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td><a asp-page="./Edit" asp-route-id="@user.Id"><input type="button" class="btn" value="Edit"></a></td>
+            </tr>
+        }
+    </tbody>
+</table>

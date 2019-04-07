@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using SNMPManager.Core.Entities;
 using SNMPManager.Core.Interfaces;
 using SNMPManager.Persistence;
 using SNMPManager.Infrastructure;
@@ -49,7 +50,12 @@ namespace SNMPManager
                                                                          Configuration.GetValue<string>("TrapListener:IP"),
                                                                          Configuration.GetValue<int>("TrapListener:Port")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // Register Swagger for API documention
             services.AddSwaggerGen(c =>
@@ -61,7 +67,7 @@ namespace SNMPManager
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IServiceProvider service)
         {
             if (env.IsDevelopment())
             {
@@ -84,6 +90,29 @@ namespace SNMPManager
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            CreateDefaultUsers(service).Wait();
+        }
+
+        private async Task CreateDefaultUsers(IServiceProvider serviceProvider)
+        {
+            var managerContext = serviceProvider.GetRequiredService<ManagerContext>();
+
+            var admin = await managerContext.Users.SingleOrDefaultAsync(u => u.UserName == "admin");
+            if (admin == null)
+            {
+                managerContext.Add(new User
+                {
+                    Id = 0,
+                    UserName = Configuration.GetValue<string>("DefaultAdmin:UserName"),
+                    Token = Configuration.GetValue<string>("DefaultAdmin:Token"),
+                    Role = managerContext.Roles.Single(r => r.Name == "Admin"),
+                    SNMPv3Auth = Configuration.GetValue<string>("DefaultAdmin:SNMPv3Auth"),
+                    SNMPv3Priv = Configuration.GetValue<string>("DefaultAdmin:SNMPv3Priv")
+                });
+
+                await managerContext.SaveChangesAsync();
+            }
         }
     }
 }

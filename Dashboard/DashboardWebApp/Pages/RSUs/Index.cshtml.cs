@@ -8,15 +8,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DashboardWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using DashboardWebApp.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashboardWebApp.Pages.RSUs
 {
     public class IndexModel : PageModel
     {
-        private readonly IRSUService _rsuService;
+        private readonly RSUService _rsuService;
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public IndexModel(IRSUService rsuService, ApplicationDbContext applicationDbContext)
+        public IndexModel(RSUService rsuService, ApplicationDbContext applicationDbContext)
         {
             _rsuService = rsuService;
             _applicationDbContext = applicationDbContext;
@@ -26,37 +27,48 @@ namespace DashboardWebApp.Pages.RSUs
 
         public async Task OnGetAsync(int? managerId)
         {
-            var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
-            if (user == null)
-            {
-                // TODO finish 
-            }
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
 
             RSUs = new List<RSU>();
 
             if (managerId.HasValue)
             {
-                var manager = _applicationDbContext.Managers.FirstOrDefault(m => m.Id == managerId);
+                var manager = _applicationDbContext.Managers
+                    .Include(m => m.Users)
+                    .FirstOrDefault(m => m.Id == managerId);
                 if (manager == null)
                 {
                     NotFound($"No manager with id: {managerId}");
                 }
 
-                var rsus = await _rsuService.GetAsync(manager, user);
+                var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == manager.Id)?.ManagerUser;
+
+                if (managerUser == null)
+                    NotFound($"There's no Manager User assigned to this User, with {manager.Name} Manager");
+
+                var rsus = await _rsuService.GetAsync(managerUser);
                 if(rsus != null)
                     RSUs = rsus.ToList();
             }
             else
             {
-                var managers = _applicationDbContext.Managers.ToList();
+                var managers = _applicationDbContext.Managers
+                    .Include(m => m.Users)
+                    .ToList();
                 if (managers == null)
                     NotFound("There are no managers");
 
                 foreach (var manager in managers)
                 {
-                    var rsus = await _rsuService.GetAsync(manager, user);
-                    if (rsus != null)
-                        RSUs.AddRange(rsus);
+                    var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == manager.Id)?.ManagerUser;
+                    if (managerUser != null)
+                    {
+                        var rsus = await _rsuService.GetAsync(managerUser);
+                        if (rsus != null)
+                            RSUs.AddRange(rsus);
+                    }
                 }
             }
         }
