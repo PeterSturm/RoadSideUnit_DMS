@@ -1,5 +1,5 @@
 ﻿using DashboardWebApp.Models;
-using DTO;
+using Common.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

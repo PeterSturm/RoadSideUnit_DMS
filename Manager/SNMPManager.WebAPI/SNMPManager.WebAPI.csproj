@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>0069a69c-7d01-4179-ae8f-d0854a2fc788</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DTO\DTO.csproj" />
+    <ProjectReference Include="..\..\Common\DTO\DTO.csproj" />
     <ProjectReference Include="..\SNMPManager.Core\SNMPManager.Core.csproj">
       <Aliases></Aliases>
     </ProjectReference>

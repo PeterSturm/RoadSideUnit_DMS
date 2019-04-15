@@ -9,7 +9,7 @@ using DashboardWebApp.Models;
 using DashboardWebApp.ViewModels.Manager;
 using DashboardWebApp.ViewModels.RSU;
 using DashboardWebApp.WebApiClients;
-using DTO;
+using Common.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;

@@ -5,7 +5,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace DTO
+namespace Common.DTO
 {
     public partial class RsuDto
     {

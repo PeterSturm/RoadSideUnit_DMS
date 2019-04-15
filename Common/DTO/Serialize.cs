@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DTO
+namespace Common.DTO
 {
     public static class Serialize
     {

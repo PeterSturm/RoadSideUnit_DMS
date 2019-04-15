@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace DTO
+namespace Common.DTO
 {
     internal static class Converter
     {

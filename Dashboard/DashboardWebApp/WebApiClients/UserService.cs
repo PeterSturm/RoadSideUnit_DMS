@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DashboardWebApp.Models;
-using DTO;
+using Common.DTO;
 
 namespace DashboardWebApp.WebApiClients
 {
