@@ -16,6 +16,6 @@ services:
 
   postgresdb:
     environment:
-      POSTGERS_USER: admin
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: snmppass
       POSTGRES_DB: webapi

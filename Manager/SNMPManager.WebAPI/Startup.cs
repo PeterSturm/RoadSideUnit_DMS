@@ -98,6 +98,8 @@ namespace SNMPManager
         {
             var managerContext = serviceProvider.GetRequiredService<ManagerContext>();
 
+            managerContext.Database.Migrate();
+
             var admin = await managerContext.Users.SingleOrDefaultAsync(u => u.UserName == "admin");
             if (admin == null)
             {
