@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
 
         int rsuCount = 10;
-        int startingPort = 2000;
+        int startingPort = 5400;
         LinkedList<Agent> agents = new LinkedList<>();
         for (int i = 0; i < rsuCount; i++) {
             agents.add(new Agent(new File("SNMP4JTestAgentBC"+i+".cfg"),

@@ -34,7 +34,7 @@ namespace SNMPManager
         {
             // Configure Entity Framework with use of postgreSQL
             services.AddEntityFrameworkNpgsql()
-                    .AddDbContext<ManagerContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ManagerDatabase"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
+                    .AddDbContext<ManagerContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("DB"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
                     .BuildServiceProvider();
 
             // Inject Custom logger and Databse handler services
