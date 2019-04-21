@@ -22,7 +22,7 @@ public class Main {
             agents.add(new Agent(new File("SNMP4JTestAgentBC"+i+".cfg"),
                     new File("SNMP4JTestAgentConfig"+i+".cfg")));
             agents.get(i).start("127.0.0.1"
-                    , 2000+i
+                    , startingPort+i
                     ,"127.0.0.1/162"
                     , "rsu"
                     , "trapauthpass01"

@@ -73,22 +73,22 @@ namespace SNMPManager.Infrastructure
 
                 // Registrate new RSU +
                 if (!rsu.HasValue)
-                { 
+                {
                     bool success = contextService.AddRSU(new RSU
-                                    {
-                                        Name = "Unnamed",
-                                        IP = e.Sender.Address,
-                                        Port = e.Sender.Port,
-                                        //Latitude = 0.0,
-                                        //Longitude = 0.0, 
-                                        Active = true,
-                                        MIBVersion = "unknown",
-                                        FirmwareVersion = "unknown",
-                                        LocationDescription = "unknown",
-                                        Manufacturer = "unknown",
-                                        NotificationIP = ownIP,
-                                        NotificationPort = listenerPort
-                                    });
+                    {
+                        Name = "Unnamed",
+                        IP = e.Sender.Address,
+                        Port = e.Sender.Port,
+                        //Latitude = 0.0,
+                        //Longitude = 0.0, 
+                        Active = true,
+                        MIBVersion = "unknown",
+                        FirmwareVersion = "unknown",
+                        LocationDescription = "unknown",
+                        Manufacturer = "unknown",
+                        NotificationIP = ownIP,
+                        NotificationPort = listenerPort
+                    });
                     if (success)
                     {
                         rsu = contextService.GetRSU().Single(r => r.IP == e.Sender.Address && r.Port == e.Sender.Port).Id;
@@ -101,6 +101,15 @@ namespace SNMPManager.Infrastructure
                     }
                 }
                 // Registrate new RSU -
+                else
+                {
+                    RSU r = contextService.GetRSU(rsu.Value);
+                    if (!r.Active)
+                    {
+                        r.Active = true;
+                        contextService.UpdateRSU(r);
+                    }
+                }
 
                 if (e.Message.Parameters.IsInvalid)
                     contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), "Invalid Trap mesage!"));

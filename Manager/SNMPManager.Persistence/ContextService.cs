@@ -337,8 +337,8 @@ namespace SNMPManager.Persistence
         public IEnumerable<TrapLog> GetTrapLogs(int rsuId)
         {
             return _managerContext.TrapLogs
-                                    .Where(log => log.SourceRSU == rsuId)
-                                    .ToArray();
+                                    ?.Where(log => log.SourceRSU == rsuId)
+                                    ?.ToArray();
         }
 
         #endregion

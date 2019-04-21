@@ -1,0 +1,21 @@
+﻿@model IEnumerable<DashboardWebApp.Models.RSU>
+
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Manager</td>
+            <td>Position</td>
+        </tr>    
+    </thead>
+    <tbody>
+        @foreach (var rsu in Model)
+        {
+        <tr>
+            <td>@rsu.Name</td>
+            <td>@rsu.Manager.Name</td>
+            <td>@rsu.Latitude @rsu.Longitude</td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -34,7 +34,8 @@ namespace SNMPManager
         {
             // Configure Entity Framework with use of postgreSQL
             services.AddEntityFrameworkNpgsql()
-                    .AddDbContext<ManagerContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("DB"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
+                    //.AddDbContext<ManagerContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("DB"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
+                    .AddDbContext<ManagerContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ManagerDatabase"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
                     .BuildServiceProvider();
 
             // Inject Custom logger and Databse handler services
@@ -49,6 +50,9 @@ namespace SNMPManager
                                                                          "trapprivpass01",
                                                                          Configuration.GetValue<string>("TrapListener:IP"),
                                                                          Configuration.GetValue<int>("TrapListener:Port")));
+
+            // Register Health checker service to chek rsus active states
+            services.AddSingleton<IHostedService>(sp => new RSUHealthChecker(sp));
 
             services.AddMvc()
                 .AddJsonOptions(options =>
@@ -98,7 +102,7 @@ namespace SNMPManager
         {
             var managerContext = serviceProvider.GetRequiredService<ManagerContext>();
 
-            managerContext.Database.Migrate();
+            //managerContext.Database.Migrate();
 
             var admin = await managerContext.Users.SingleOrDefaultAsync(u => u.UserName == "admin");
             if (admin == null)
