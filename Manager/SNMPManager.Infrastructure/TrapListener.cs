@@ -52,7 +52,7 @@ namespace SNMPManager.Infrastructure
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            listener.Stop();
+            listener?.Stop();
 
             return Task.CompletedTask;
         }

@@ -18,9 +18,6 @@ RUN dotnet build SNMPManager.WebAPI.csproj -c Release -o /app
 FROM build AS publish
 RUN dotnet publish SNMPManager.WebAPI.csproj -c Release -o /app
 
-#RUN dotnet ef migrations script -o migration.sql --idempotent
-#COPY migration.sql /app
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
