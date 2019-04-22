@@ -58,7 +58,9 @@ namespace DashboardWebApp.Data
                     Id = 1,
                     Name = "Local",
                     IP = IPAddress.Parse("127.0.0.1"),
-                    Port = 51467
+                    Port = 51467,
+                    Latitude = 47.5927,
+                    Longitude = 19.037
                 });
 
             /*builder.Entity<ManagerUser>().HasData(new

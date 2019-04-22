@@ -22,6 +22,8 @@ namespace DashboardWebApp.ViewModels.Manager
                 Name = manager.Name,
                 IP = manager.IP,
                 Port = manager.Port,
+                Latitude = manager.Latitude,
+                Longitude = manager.Longitude,
                 Users = manager.Users,
                 ManagerUserEditModels = manager.Users.Select(mu => new ManagerUserEditModel(mu)).ToList()
             };
@@ -35,6 +37,8 @@ namespace DashboardWebApp.ViewModels.Manager
                 manager.Name = Name;
                 manager.IP = IP;
                 manager.Port = Port;
+                manager.Latitude = manager.Latitude;
+                manager.Longitude = manager.Longitude;
                 manager.Users = Users;
             }
             else
@@ -44,7 +48,9 @@ namespace DashboardWebApp.ViewModels.Manager
                     Name = Name,
                     IP = IP,
                     Port = Port,
-                    Users = Users
+                    Users = Users,
+                    Latitude = Latitude,
+                    Longitude = Longitude
                 };
             }
 
