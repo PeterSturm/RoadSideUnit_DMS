@@ -52,7 +52,9 @@ namespace SNMPManager
                                                                          Configuration.GetValue<int>("TrapListener:Port")));
 
             // Register Health checker service to chek rsus active states
-            services.AddSingleton<IHostedService>(sp => new RSUHealthChecker(sp));
+            services.AddSingleton<IHostedService>(sp => new RSUHealthChecker(sp
+                        , Configuration.GetValue<int>("RSUHealthChecker:Period")
+                        , Configuration.GetValue<int>("RSUHealthChecker:HealthTreshold")));
 
             services.AddMvc()
                 .AddJsonOptions(options =>

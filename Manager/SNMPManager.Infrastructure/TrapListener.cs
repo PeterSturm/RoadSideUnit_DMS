@@ -68,11 +68,13 @@ namespace SNMPManager.Infrastructure
             {
                 var contextService = scope.ServiceProvider.GetRequiredService<IContextService>();
 
-                int? rsu = contextService.GetRSU().SingleOrDefault(r => r.IP.ToString() == e.Sender.Address.ToString()
-                                                                     && r.Port == e.Sender.Port)?.Id;
+                RSU rsu = contextService.GetRSU().SingleOrDefault(r => r.IP.ToString() == e.Sender.Address.ToString()
+                                                                     && r.Port == e.Sender.Port);
+
+                //int? rsuid = rsu?.Id;
 
                 // Registrate new RSU +
-                if (!rsu.HasValue)
+                if (rsu == null)
                 {
                     bool success = contextService.AddRSU(new RSU
                     {
@@ -91,8 +93,8 @@ namespace SNMPManager.Infrastructure
                     });
                     if (success)
                     {
-                        rsu = contextService.GetRSU().Single(r => r.IP == e.Sender.Address && r.Port == e.Sender.Port).Id;
-                        contextService.AddManagerLog(new ManagerLog(DateTime.Now, LogType.DB, $"Registered new RSU with id: {rsu}"));
+                        rsu = contextService.GetRSU().Single(r => r.IP == e.Sender.Address && r.Port == e.Sender.Port);
+                        contextService.AddManagerLog(new ManagerLog(DateTime.Now, LogType.DB, $"Registered new RSU with id: {rsu.Id}"));
                     }
                     else
                     {
@@ -103,21 +105,20 @@ namespace SNMPManager.Infrastructure
                 // Registrate new RSU -
                 else
                 {
-                    RSU r = contextService.GetRSU(rsu.Value);
-                    if (!r.Active)
+                    if (!rsu.Active)
                     {
-                        r.Active = true;
-                        contextService.UpdateRSU(r);
+                        rsu.Active = true;
+                        contextService.UpdateRSU(rsu);
                     }
                 }
 
                 if (e.Message.Parameters.IsInvalid)
-                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), "Invalid Trap mesage!"));
+                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.Id, "Invalid Trap mesage!"));
 
                 try
                 {
                     if (e.Message.Scope.Pdu.Variables.Count == 0)
-                        contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), "Heartbeat ping"));
+                        contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.Id, "Heartbeat ping"));
 
                     /*if (e.Message.Scope.Pdu.TypeCode == SnmpType.TrapV2Pdu)
                     {
@@ -129,7 +130,7 @@ namespace SNMPManager.Infrastructure
                 }
                 catch(Exception ex)
                 {
-                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.GetValueOrDefault(), $"Error processing Trap message! {ex.Message.Take(250)}"));
+                    contextService.AddTrapLog(new TrapLog(DateTime.Now, LogType.SNMP, rsu.Id, $"Error processing Trap message! {ex.Message.Take(250)}"));
                 }
             }
         }

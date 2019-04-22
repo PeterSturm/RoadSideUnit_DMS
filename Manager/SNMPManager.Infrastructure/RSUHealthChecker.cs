@@ -20,10 +20,14 @@ namespace SNMPManager.Infrastructure
     {
         private readonly IServiceProvider _serviceProvider;
         private Timer timer;
+        private int period;
+        private int healthTreshold;
 
-        public RSUHealthChecker(IServiceProvider serviceProvider)
+        public RSUHealthChecker(IServiceProvider serviceProvider, int period, int healthTreshold)
         { 
             _serviceProvider = serviceProvider;
+            this.period = period;
+            this.healthTreshold = healthTreshold;
         }
 
         private void HealthCheck(object state)
@@ -38,7 +42,7 @@ namespace SNMPManager.Infrastructure
                     var lastlog = contextService.GetTrapLogs(rsu.Id)?.LastOrDefault();
                     if (lastlog != null)
                     {
-                        if ((DateTime.Now - lastlog.TimeStamp).TotalMinutes > 5)
+                        if ((DateTime.Now - lastlog.TimeStamp).TotalMinutes > healthTreshold)
                         {
                             rsu.Active = false;
                             contextService.UpdateRSU(rsu);
@@ -55,7 +59,7 @@ namespace SNMPManager.Infrastructure
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            timer = new Timer(HealthCheck, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            timer = new Timer(HealthCheck, null, TimeSpan.Zero, TimeSpan.FromMinutes(period));
             return Task.CompletedTask;
         }
 
