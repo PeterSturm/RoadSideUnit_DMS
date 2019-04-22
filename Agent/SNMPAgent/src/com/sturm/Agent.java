@@ -64,6 +64,7 @@ public class Agent  extends BaseAgent {
             address = "127.0.0.1";
 
         address += "/" + String.format("%d", port);
+        this.port = port;
 
         trapListenerAddress = trapAddress;
         trapUserName = new OctetString(trapusername);
