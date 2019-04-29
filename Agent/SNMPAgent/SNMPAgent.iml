@@ -29,5 +29,21 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/Documents/szakdolgozat/libs/commons-net-3.6" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="file://$USER_HOME$/Documents/szakdolgozat/libs/commons-net-3.6/apidocs" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://$USER_HOME$/Documents/szakdolgozat/libs/commons-net-3.6" />
+          <root url="file://$USER_HOME$/Documents/szakdolgozat/libs/commons-net-3.6" />
+        </SOURCES>
+        <jarDirectory url="file://$USER_HOME$/Documents/szakdolgozat/libs/commons-net-3.6" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/Documents/szakdolgozat/libs/commons-net-3.6" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

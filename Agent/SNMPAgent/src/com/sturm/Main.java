@@ -1,6 +1,7 @@
 package com.sturm;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import sun.awt.image.ImageWatched;
 
 import java.io.Console;
 import java.io.File;
@@ -15,25 +16,16 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        int rsuCount = 10;
-        int startingPort = 62878;
-        LinkedList<Agent> agents = new LinkedList<>();
-        for (int i = 0; i < rsuCount; i++) {
-            agents.add(new Agent(new File("SNMP4JTestAgentBC"+i+".cfg"),
-                    new File("SNMP4JTestAgentConfig"+i+".cfg")));
-            agents.get(i).start("127.0.0.1"
-                    , startingPort+i
-                    ,"127.0.0.1/162"
-                    , "rsu"
-                    , "trapauthpass01"
-                    , "trapprivpass01");
-            System.out.println(agents.get(i).address);
-        }
+        LinkedList<RSUAgent> rsus = RSUAgentLoader.Load("rsus.txt");
+
+        for(RSUAgent rsu : rsus)
+            rsu.startAgent();
+
         while (true) {
             try {
-                for (int i = 0; i < rsuCount; i++) {
-                    agents.get(i).sendTrap();
-                }
+                for (RSUAgent rsu : rsus)
+                    rsu.agent.sendTrap();
+
                 Thread.sleep(5000);
             }
             catch (InterruptedException ex1) {

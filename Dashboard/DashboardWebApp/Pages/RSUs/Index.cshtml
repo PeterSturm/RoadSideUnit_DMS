@@ -9,9 +9,9 @@
 
 <h1>Rsu</h1>
 
-<p>
-    <a asp-page="./Create">Create</a>
-</p>
+@*/<p>
+        <a asp-page="./Create">Create</a>
+    </p>*@
 
 <table class="table">
     <thead class="thead-dark">
@@ -30,20 +30,22 @@
     <tbody>
         @foreach (var rsu in Model.RSUs)
         {
-        <tr>
-            <td>@rsu.Name</td>
-            <td>@rsu.IP.ToString() / @rsu.Port</td>
-            <td>@rsu.Manager.Name</td>
-            <td>@rsu.Manager.IP / @rsu.Manager.Port</td>
-            <td>@rsu.NotificationIP / @rsu.NotificationPort</td>
-            <td>@rsu.Latitude</td>
-            <td>@rsu.Longitude</td>
-            <td><a asp-page="../TrapLogs/Index" asp-route-managerId="@rsu.Manager.Id" asp-route-rsuId="@rsu.Id">Trap Logs</a></td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a> |
-                <a asp-page="./Delete" asp-route-id="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">Delete</a>
-            </td>
-        </tr>
-        }</tbody>
+            <tr>
+                <td>@rsu.Name</td>
+                <td>@rsu.IP.ToString() / @rsu.Port</td>
+                <td>@rsu.Manager.Name</td>
+                <td>@rsu.Manager.IP / @rsu.Manager.Port</td>
+                <td>@rsu.NotificationIP / @rsu.NotificationPort</td>
+                <td>@rsu.Latitude</td>
+                <td>@rsu.Longitude</td>
+                <td><a asp-page="../TrapLogs/Index" asp-route-managerId="@rsu.Manager.Id" asp-route-rsuId="@rsu.Id">Trap Logs</a></td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a> |
+                    <a asp-page="./Delete" asp-route-id="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">Delete</a> |
+                    <a asp-page="./SnmpGET" asp-route-rsuId="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">SNMP GET</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 

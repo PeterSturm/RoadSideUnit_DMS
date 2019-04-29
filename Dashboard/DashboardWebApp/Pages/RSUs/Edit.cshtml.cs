@@ -11,6 +11,7 @@ using DashboardWebApp.WebApiClients;
 using Common.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashboardWebApp.Pages.RSUs
 {
@@ -33,22 +34,22 @@ namespace DashboardWebApp.Pages.RSUs
             if (id == null)
                 return NotFound();
 
-            var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
-            if (user == null)
-            {
-                // TODO finish 
-            }
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)              
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
 
             if (managerId == null)
                 return NotFound();
 
-            var manager = _applicationDbContext.Managers.FirstOrDefault(m => m.Id == managerId.Value);
+            var manager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .FirstOrDefault(m => m.Id == managerId.Value);
             if (manager == null)
                 return NotFound();
 
             var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == managerId)?.ManagerUser;
             if (managerUser == null)
-                NotFound($"There's no Manager User assigned to this User, with {manager.Name} Manager");
+                return NotFound($"There's no Manager User assigned to this User, with {manager.Name} Manager");
 
             RSUEditM = RSUEditModel.Parse( await _rsuService.GetAsync(managerUser, id.Value), manager);
 
@@ -63,15 +64,21 @@ namespace DashboardWebApp.Pages.RSUs
             if (!ModelState.IsValid)
                 return Page();
 
-            var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
 
-            var prevManager = _applicationDbContext.Managers.FirstOrDefault(m => m.IP.ToString() == RSUEditM.prevMIP && m.Port == RSUEditM.prevMPort);
+            var prevManager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .FirstOrDefault(m => m.IP.ToString() == RSUEditM.prevMIP && m.Port == RSUEditM.prevMPort);
             if (prevManager == null)
             { 
                 // TODO 
             }
 
-            var manager = _applicationDbContext.Managers.FirstOrDefault(m => m.IP.ToString() == RSUEditM.prevMIP && m.Port == RSUEditM.prevMPort);
+            var manager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .FirstOrDefault(m => m.IP.ToString() == RSUEditM.prevMIP && m.Port == RSUEditM.prevMPort);
             if (manager == null)
             {
                 // TODO 

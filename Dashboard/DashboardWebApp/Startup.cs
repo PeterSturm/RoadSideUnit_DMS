@@ -51,6 +51,7 @@ namespace DashboardWebApp
             services.AddHttpClient<UserService>();
             services.AddHttpClient<ManagerLogService>();
             services.AddHttpClient<TrapLogService>();
+            services.AddHttpClient<SnmpService>();
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>

@@ -52,7 +52,9 @@ namespace DashboardWebApp.Pages.RSUs
             if (!ModelState.IsValid)
                 return Page();
 
-            var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
 
             var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == RSU.ManagerId)?.ManagerUser;
             if (managerUser == null)

@@ -57,10 +57,10 @@ namespace DashboardWebApp.Pages.Managers
             if (manager == null)
                 return NotFound();
 
-            foreach (var managerUser in ManagerEditM.Users)
+            /*foreach (var managerUser in ManagerEditM.Users)
             {
-
-            }
+            // TODO
+            }*/
 
             manager = ManagerEditM.MapToManager(manager);
 

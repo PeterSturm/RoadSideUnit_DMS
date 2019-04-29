@@ -7,6 +7,7 @@ using DashboardWebApp.Models;
 using DashboardWebApp.WebApiClients;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashboardWebApp.Pages.RSUs
 {
@@ -29,7 +30,9 @@ namespace DashboardWebApp.Pages.RSUs
             if (!id.HasValue)
                 return NotFound();
 
-            var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
             if (user == null)
             {
                 // TODO finish 
@@ -38,7 +41,9 @@ namespace DashboardWebApp.Pages.RSUs
             if (!managerId.HasValue)
                 return NotFound();
 
-            var manager = _applicationDbContext.Managers.FirstOrDefault(m => m.Id == managerId.Value);
+            var manager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .FirstOrDefault(m => m.Id == managerId.Value);
             if (manager == null)
                 return NotFound();
 
@@ -59,7 +64,9 @@ namespace DashboardWebApp.Pages.RSUs
             if (!id.HasValue)
                 return NotFound();
 
-            var user = _applicationDbContext.Users.FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
             if (user == null)
             {
                 // TODO finish 
@@ -68,7 +75,9 @@ namespace DashboardWebApp.Pages.RSUs
             if (!managerId.HasValue)
                 return NotFound();
 
-            var manager = _applicationDbContext.Managers.FirstOrDefault(m => m.Id == managerId.Value);
+            var manager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .FirstOrDefault(m => m.Id == managerId.Value);
             if (manager == null)
                 return NotFound();
 

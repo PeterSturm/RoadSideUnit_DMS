@@ -9,6 +9,7 @@ using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Exceptions;
 using Lextm.SharpSnmpLib;
+using Common.DTO;
 
 namespace SNMPManager.WebAPI.Controllers
 {
@@ -26,10 +27,10 @@ namespace SNMPManager.WebAPI.Controllers
             _snmpManagerService.Configure(_contextService.GetManagerSettings());
         }
 
-        [HttpGet]
+        [HttpGet("{username}/{token}/{rsuid}/{OID}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public ActionResult<IEnumerable<MIBObject>> Get(string username, string token, int rsuid, string OID)
+        public ActionResult<IEnumerable<MIBObjectDto>> Get(string username, string token, int rsuid, string OID)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
@@ -53,13 +54,17 @@ namespace SNMPManager.WebAPI.Controllers
             catch (ReplyIsReportMessage) { return NotFound(); }
             catch (SnmpGetError) { return NotFound(); }
 
-            return mibobjects;
+            return mibobjects.Select(mibo => new MIBObjectDto {
+                    Oid = mibo.OID,
+                    Type = mibo.Type.ToString(),
+                    Value = mibo.Value
+                }).ToList();
         }
 
-        [HttpPost]
+        [HttpPost("{username}/{token}/{rsuid}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public IActionResult Set(string username, string token, int rsuid, string OID, SnmpType type, string value)
+        public IActionResult Set(string username, string token, int rsuid, [FromBody] MIBObjectDto mibObject)
         {
             var securityProblem = AuthenticateAuthorize(username, token);
             if (securityProblem != null)
@@ -71,16 +76,18 @@ namespace SNMPManager.WebAPI.Controllers
             if (rsu == null)
                 return NotFound($"RSU with id {rsuid} not found!");
 
+            MIBObject mibo = new MIBObject(mibObject.Oid, mibObject.Type, mibObject.Value);
+
             try
             {
-                if (_snmpManagerService.Set(rsu, user, OID, type, value))
+                if (_snmpManagerService.Set(rsu, user, mibo.OID, mibo.Type, mibo.Value))
                     return Ok();
                 else
                     return StatusCode(500);
             }
             catch (ReplyIsReportMessage) { return NotFound(); }
             catch (InvalidDataType) { return BadRequest("Invalid data type"); }
-            catch (FormatException) { return BadRequest($"Invalid value for type {type.ToString()}"); }
+            catch (FormatException) { return BadRequest($"Invalid value for type {mibObject.Type.ToString()}"); }
         }
     }
 }

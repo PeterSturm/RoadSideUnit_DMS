@@ -1,0 +1,32 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.TextField?>
+<GridPane fx:controller="UI.Controller" xmlns:fx="http://javafx.com/fxml" alignment="top_left" hgap="10" vgap="10">
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+    <columnConstraints>
+        <ColumnConstraints percentWidth="60.0"></ColumnConstraints>
+        <ColumnConstraints percentWidth="40.0"></ColumnConstraints>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints></RowConstraints>
+        <RowConstraints percentHeight="100.0"></RowConstraints>
+    </rowConstraints>
+
+    <GridPane GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="1" text="Trap messages periodicity[ms]:"></Label>
+        <TextField fx:id="txtPeriodicity" GridPane.rowIndex="0" GridPane.columnIndex="2"></TextField>
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="3" text="Min variance[ms]:"></Label>
+        <TextField fx:id="txtminVariance" GridPane.rowIndex="0" GridPane.columnIndex="4"></TextField>
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="5" text="Max variance[ms]:"></Label>
+        <TextField fx:id="txtmaxVariance" GridPane.rowIndex="0" GridPane.columnIndex="6"></TextField>
+    </GridPane>
+
+    <GridPane fx:id="gridPane" alignment="TOP_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1" vgap="10"></GridPane>
+    <TextArea fx:id="log" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+</GridPane>

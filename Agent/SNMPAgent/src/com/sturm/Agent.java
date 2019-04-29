@@ -75,22 +75,12 @@ public class Agent  extends BaseAgent {
             this.address = address;
             init();
             configTrap();
-            //agent.loadConfig(ImportModes.REPLACE_CREATE);
             addShutdownHook();
             getServer().addContext(new OctetString("public"));
             finishInit();
 
             run();
             sendColdStartNotification();
-
-            /*while (true) {
-                try {
-                    Thread.sleep(1000);
-                }
-                catch (InterruptedException ex1) {
-                    break;
-                }
-            }*/
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -120,6 +110,7 @@ public class Agent  extends BaseAgent {
 
         try {
             session.send(pdu, target);
+            System.out.println(address + " sent trap to: " + trapListenerAddress);
         } catch (IOException e) {
             e.printStackTrace();
         }
