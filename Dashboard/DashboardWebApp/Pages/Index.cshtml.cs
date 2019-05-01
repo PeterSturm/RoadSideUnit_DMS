@@ -65,5 +65,32 @@ namespace DashboardWebApp.Pages
                 }
             }
         }
+
+        public JsonResult OnGetRsus(double lat, double lon)
+        {
+            var manager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .Where(m => m.Latitude == lat && m.Longitude == lon)
+                .FirstOrDefault();
+
+            if (manager == null)
+                return new JsonResult(null);
+
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
+            var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == manager.Id)?.ManagerUser;
+            if(managerUser == null)
+                return new JsonResult(null);
+
+            var rsus = _rsuService.GetAsync(managerUser).Result;
+            if(rsus == null)
+                return new JsonResult(null);
+
+            return new JsonResult(rsus
+                .Select(r => new MapNode(r.Name, r.LocationDescription, r.Latitude, r.Longitude))
+                .Select(mn => new { mn.Lat, mn.Lon})
+                .ToArray());
+        }
     }
 }

@@ -2,10 +2,17 @@
 
 <div><span id="markerinfo"></span></div>
 <div id="map" style="height: 500px; width: 700px; max-width: 100%; margin: auto;"></div>
-<script>
+
+<script type="text/javascript">
+
+    var rsus = [];
+    var rsusmarkers = [];
+    var map;
+
     document.addEventListener("DOMContentLoaded", function () {
+
         // The DOMContentLoaded event fires when the page is ready (like $(document).ready() in jQuery)
-        var map = createMap('map', 47.2885, 19.4113, 7);
+        map = createMap('map', 47.2885, 19.4113, 7);
         // map is the id of our div element and the other options are
         // lattitude, longitude and zoom
 
@@ -15,12 +22,61 @@
         populateMapWithNodes(map);
     });
 
-    function onMarkerClick(e) {       
-        markerinfo.textContent = e.latlng.toString();
+    function onMarkerClick(e) {
+        if (rsus.length != 0) {
+            rsus.forEach(function (rsu) {
+                map.removeLayer(rsu)
+            });
+            rsus = [];
+
+
+            markerinfo.textContent = '';
+        }
+        else {
+
+            $.ajax({
+                type: 'GET',
+                url: 'Index?handler=Rsus',
+                contentType: "application/json",
+                dataType: 'json',
+                data: {
+                    lat: e.latlng.lat,
+                    lon: e.latlng.lng
+                },
+                success: function (response) {
+                    if (response != null && !jQuery.isEmptyObject(response)) {
+                        $.each(response, function (index, rsu) {
+                            rsus[index] = addMarker(map, rsu, null, true);
+                        });
+                    }
+                },
+                failure: function (response) {
+                }
+            });
+
+
+            markerinfo.textContent = e.latlng.toString();
+        }
+
     }
 
-    function addMarker(map, latLng, onClick) {
-        var marker = L.marker(latLng).addTo(map);
+    function addMarker(map, latLng, onClick, rsu) {
+
+        var iconpath = 'manager.png';
+        var iconsize = [32, 32];
+        var opacity = 0.65;
+        if (rsu) {
+            iconpath = 'rsu.png'
+            iconsize = [18, 18];
+            opacity = 1;
+        }
+
+        var managerIcon = L.icon({
+            iconUrl: iconpath,
+            iconSize: iconsize,
+        });;
+        var marker = L.marker(latLng, { icon: managerIcon }).addTo(map);
+        marker.setOpacity(opacity);
         if (onClick !== null) {
             marker.on('click', onClick);
         }
@@ -32,7 +88,7 @@
         var markersLatLng = @Html.Raw(Json.Serialize(@Model.Select(mn => new { mn.Lat, mn.Lon}).ToList()));
 
         markersLatLng.forEach(function (latLng) {
-            addMarker(map, latLng, onMarkerClick);
+            addMarker(map, latLng, onMarkerClick, false);
         });
     }
 
