@@ -1,15 +1,16 @@
 package Agent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 public class RSUAgentLoader
 {
+    public static ArrayList<Boolean> processedLines;
+
     public static ArrayList<RSUAgent> Load(String filename)
     {
         ArrayList<RSUAgent> agents = new ArrayList<RSUAgent>();
+        processedLines = new ArrayList<>();
 
         try
         {
@@ -19,7 +20,7 @@ public class RSUAgentLoader
                 String line = scanner.nextLine();
                 String[] data = line.split(";");
 
-                if(data.length == 7)
+                if(data.length == 7) {
                     agents.add(new RSUAgent(data[0]
                             , data[1]
                             , data[2]
@@ -29,16 +30,24 @@ public class RSUAgentLoader
                             , data[6]
                             , null
                             , null));
-                else
+                    processedLines.add(true);
+                }
+                else if (data.length == 9) {
                     agents.add(new RSUAgent(data[0]
                             , data[1]
                             , data[2]
                             , data[3]
                             , data[4]
                             , data[5]
-                            , null
-                            , null
-                            , null));
+                            , Double.parseDouble(data[6])
+                            , Double.parseDouble(data[7])
+                            , Double.parseDouble(data[8])));
+                    processedLines.add(true);
+                }
+                else
+                {
+                    processedLines.add(false);
+                }
             }
             scanner.close();
         }

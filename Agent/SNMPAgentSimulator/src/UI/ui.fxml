@@ -27,6 +27,6 @@
         <TextField fx:id="txtmaxVariance" GridPane.rowIndex="0" GridPane.columnIndex="6"></TextField>
     </GridPane>
 
-    <GridPane fx:id="gridPane" alignment="TOP_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1" vgap="10"></GridPane>
+    <GridPane fx:id="gridPane" alignment="TOP_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1" vgap="10" hgap="10"></GridPane>
     <TextArea fx:id="log" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 </GridPane>

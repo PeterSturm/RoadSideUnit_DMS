@@ -1,6 +1,6 @@
-127.0.0.1;62878;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;192.168.2.214
-127.0.0.1;62879;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;192.168.2.10
-127.0.0.1;62880;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;
-127.0.0.1;62881;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;
-127.0.0.1;62882;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;
-127.0.0.1;62883;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;
+127.0.0.1;62878;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;42.25;48.36;100
+127.0.0.1;62879;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;40.25;35.36;100
+127.0.0.1;62880;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;42.25;48.36;100
+127.0.0.1;62881;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;42.25;48.36;100
+127.0.0.1;62882;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;42.25;48.36;100
+127.0.0.1;62883;127.0.0.1/162;rsu;trapauthpass01;trapprivpass01;42.25;48.36;100

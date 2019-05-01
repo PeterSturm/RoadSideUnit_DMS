@@ -8,6 +8,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -41,18 +42,22 @@ public class Controller {
     @FXML
     private void initialize()
     {
-        rsus = RSUAgentLoader.Load("rsus.txt");
         log.appendText("Start load rsu agent from file: " + "rsus.txt\n");
+        rsus = RSUAgentLoader.Load("rsus.txt");
+        for (int i = 0; i < RSUAgentLoader.processedLines.size(); i++) {
+            if (!RSUAgentLoader.processedLines.get(i))
+            log.appendText(String.format("Line %d failed to load\n", i));
+        }
 
         Button btnStartAll = new Button("Start All");
         btnStartAll.setId("btnStartAll");
         btnStartAll.setOnAction(AllAgentStart);
-        gridPane.add(btnStartAll, 1, 0);
+        gridPane.add(btnStartAll, 2, 0);
 
         Button btnStartSendAll = new Button("Start Send All");
         btnStartSendAll.setId("btnStartAll");
         btnStartSendAll.setOnAction(AllAgentStartSend);
-        gridPane.add(btnStartSendAll, 2, 0);
+        gridPane.add(btnStartSendAll, 3, 0);
 
         for (int i = 0; i < rsus.size(); i++)
         {
@@ -60,16 +65,20 @@ public class Controller {
             rsulabel.setId(String.format("rsulabel_%d", i));
             gridPane.add(rsulabel, 0, i+1);
 
+            Label rsuIsRealLabel = new Label((rsus.get(i).Real)? "Real" : "Not real");
+            rsuIsRealLabel.setId(String.format("rsuislabel_%d", i));
+            gridPane.add(rsuIsRealLabel, 1, i+1);
+
             Button rsubtnStart = new Button("Start");
             rsubtnStart.setId(String.format("btnstart_%d", i));
             rsubtnStart.setOnAction(rsuAgentStart);
-            gridPane.add(rsubtnStart, 1, i+1);
+            gridPane.add(rsubtnStart, 2, i+1);
 
             Button rsubtnSend = new Button("Start Send Trap");
             rsubtnSend.setId(String.format("btnsend_%d", i));
             rsubtnSend.setOnAction(rsuAgentSendTrap);
             rsubtnSend.setDisable(true);
-            gridPane.add(rsubtnSend, 2, i+1);
+            gridPane.add(rsubtnSend, 3, i+1);
 
 
             log.appendText("Loaded " + rsus.get(i).IP + "/" + rsus.get(i).Port + " RSU agent\n");

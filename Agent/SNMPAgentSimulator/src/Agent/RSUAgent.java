@@ -29,8 +29,27 @@ public class RSUAgent
 
     public Agent agent;
 
+    public boolean Real;
     public boolean Running;
     public boolean SendTrap;
+
+    public RSUAgent(String ip, String port, String trapaddress, String trapuser, String trapauth, String trappriv, double lat, double lon, double elv) {
+        IP = ip;
+        Port = port;
+        TrapAddress = trapaddress;
+        TrapUser = trapuser;
+        TrapAuth = trapauth;
+        TrapPriv = trappriv;
+
+        mibObjects = new ArrayList<MibObject>();
+        mibObjects.add(new MibObject("6", MibObject.SNMPType.Integer32, lat * 1000000));
+        mibObjects.add(new MibObject("7", MibObject.SNMPType.Integer32, lon * 1000000));
+        mibObjects.add(new MibObject("8", MibObject.SNMPType.Integer32, elv * 1000000));
+
+        Running = false;
+        SendTrap = false;
+        Real = false;
+    }
 
     public RSUAgent(String ip, String port, String trapaddress, String trapuser, String trapauth, String trappriv, String telnetip, String telnetuser, String telnetpass)
     {
@@ -50,6 +69,8 @@ public class RSUAgent
 
         if(TelnetIP != null && TelnetIP != "")
         {
+            Real = true;
+
             TelnetAPI telnet = new TelnetAPI(TelnetIP, TelnetUser, TelnetPass, "ate>");
 
             String result;
