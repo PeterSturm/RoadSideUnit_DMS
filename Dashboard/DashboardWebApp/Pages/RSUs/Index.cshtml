@@ -7,22 +7,25 @@
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<h1>Rsu</h1>
+<h1>Rsus</h1>
 
 @*/<p>
         <a asp-page="./Create">Create</a>
     </p>*@
 
-<table class="table">
+<table class="table /*table-sm*/ table-hover">
     <thead class="thead-dark">
         <tr>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Name)</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].IP) / @Html.DisplayNameFor(model => model.RSUs[0].Port)</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Manager)</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Manager) @Html.DisplayNameFor(model => model.RSUs[0].Manager.IP) / @Html.DisplayNameFor(model => model.RSUs[0].Manager.Port)</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].NotificationIP)</td>
+            <td>@Html.DisplayNameFor(model => model.RSUs[0].NotificationIP) / Port</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Latitude)</td>
             <td>@Html.DisplayNameFor(model => model.RSUs[0].Longitude)</td>
+            <td>Status</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
         </tr>
@@ -30,7 +33,8 @@
     <tbody>
         @foreach (var rsu in Model.RSUs)
         {
-            <tr>
+            <tr class="@(rsu.Active ? "table-success" : "table-danger")">
+            
                 <td>@rsu.Name</td>
                 <td>@rsu.IP.ToString() / @rsu.Port</td>
                 <td>@rsu.Manager.Name</td>
@@ -38,12 +42,11 @@
                 <td>@rsu.NotificationIP / @rsu.NotificationPort</td>
                 <td>@rsu.Latitude</td>
                 <td>@rsu.Longitude</td>
+                <td>@(rsu.Active? "Active" : "Inactive")</td>
                 <td><a asp-page="../TrapLogs/Index" asp-route-managerId="@rsu.Manager.Id" asp-route-rsuId="@rsu.Id">Trap Logs</a></td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a> |
-                    <a asp-page="./Delete" asp-route-id="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">Delete</a> |
-                    <a asp-page="./SnmpGET" asp-route-rsuId="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">SNMP GET</a>
-                </td>
+                <td><a asp-page="./Edit" asp-route-id="@rsu.Id" asp-route-managerid="@rsu.Manager.Id">Edit</a></td>
+                <td><a asp-page="./Delete" asp-route-id="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">Delete</a></td>
+                <td><a asp-page="./SnmpGET" asp-route-rsuId="@rsu.Id" asp-route-managerId="@rsu.Manager.Id">SNMP GET</a></td>
             </tr>
         }
     </tbody>
