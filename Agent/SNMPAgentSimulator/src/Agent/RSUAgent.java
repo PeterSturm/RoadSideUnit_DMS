@@ -1,9 +1,11 @@
 package Agent;
 
 import com.sun.webkit.graphics.WCTextRunImpl;
+import org.snmp4j.smi.Integer32;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by: Péter Sturm
@@ -48,11 +50,30 @@ public class RSUAgent
 
         if(TelnetIP != null && TelnetIP != "")
         {
-            TelnetAPI telnet = new TelnetAPI(TelnetIP, TelnetUser, TelnetPass, "$");
+            TelnetAPI telnet = new TelnetAPI(TelnetIP, TelnetUser, TelnetPass, "ate>");
 
-            //telnet.executeCommand("");
+            String result;
 
-            //TODO fill mibObjects
+            result = telnet.executeCommand("stp-print");
+            ArrayList<String> infos  = new ArrayList<String>(Arrays.asList(result.split("\r\n")));
+
+            for (String info : infos)
+            {
+                if (info.contains("**manual-latitude"))
+                    mibObjects.add(new MibObject("6"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                if (info.contains("**manual-longitude"))
+                    mibObjects.add(new MibObject("7"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                if (info.contains("  manual-altitude"))
+                    mibObjects.add(new MibObject("8"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+            }
+
+            telnet.disconnect();
         }
     }
 

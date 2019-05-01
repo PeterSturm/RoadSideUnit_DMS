@@ -19,7 +19,7 @@ public class RSUAgentLoader
                 String line = scanner.nextLine();
                 String[] data = line.split(";");
 
-                if(data.length == 8)
+                if(data.length == 7)
                     agents.add(new RSUAgent(data[0]
                             , data[1]
                             , data[2]
@@ -27,8 +27,8 @@ public class RSUAgentLoader
                             , data[4]
                             , data[5]
                             , data[6]
-                            , data[7]
-                            , data[8]));
+                            , null
+                            , null));
                 else
                     agents.add(new RSUAgent(data[0]
                             , data[1]

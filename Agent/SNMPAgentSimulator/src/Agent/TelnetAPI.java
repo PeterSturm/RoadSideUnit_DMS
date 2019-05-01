@@ -12,7 +12,7 @@ public class TelnetAPI {
     private PrintStream output;
     private String prompt = "#";
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         TelnetAPI telnet = new TelnetAPI("192.168.0.178", "sturm", "Pass01", "$");
         System.out.println(telnet.executeCommand("ls"));
         try
@@ -27,7 +27,7 @@ public class TelnetAPI {
         {
             telnet.disconnect();
         }
-    }
+    }*/
 
     public TelnetAPI(String server, String user, String password, String prompt)
     {
@@ -39,13 +39,16 @@ public class TelnetAPI {
             output = new PrintStream(telnet.getOutputStream());
             this.prompt = prompt;
 
-            readUntil("login:");
-            output.println(user);
-            output.flush();
-            readUntil("Password:");
-            output.println(password);
-            output.flush();
-            readUntil(prompt + "");
+            if (user != null && password != null)
+            {
+                readUntil("login:");
+                output.println(user);
+                output.flush();
+                readUntil("Password:");
+                output.println(password);
+                output.flush();
+            }
+            readUntil(prompt + " ");
         }
         catch (Exception e)
         {
@@ -59,7 +62,7 @@ public class TelnetAPI {
         {
             output.println(command);
             output.flush();
-            String result = readUntil(prompt + "");
+            String result = readUntil(prompt + " ");
             return result.substring(0,result.lastIndexOf("\n"));
         }
         catch (Exception e)

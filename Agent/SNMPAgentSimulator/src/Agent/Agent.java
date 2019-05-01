@@ -138,10 +138,10 @@ public class Agent  extends BaseAgent {
     @Override
     protected void registerManagedObjects() {
         try {
-            server.register(createGPSTable(4700000, 4500000, 100), null);
+            //server.register(createGPSTable(4700000, 4500000, 100), null);
 
-            //if(mibObjects != null)
-            //    server.register(createGPSTable(mibObjects), null);
+            if(mibObjects != null)
+                server.register(createGPSTable(mibObjects), null);
         }
         catch (DuplicateRegistrationException ex) {
             ex.printStackTrace();
