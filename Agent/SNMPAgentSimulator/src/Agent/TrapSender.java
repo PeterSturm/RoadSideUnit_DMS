@@ -1,10 +1,13 @@
 package Agent;
 
+import com.sun.javafx.tk.Toolkit;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TrapSender implements Runnable{
+public class TrapSender extends Task {
 
     private ArrayList<RSUAgent> rsuAgents;
     private javafx.scene.control.TextArea log;
@@ -44,7 +47,7 @@ public class TrapSender implements Runnable{
     }
 
     @Override
-    public void run() {
+    protected Void call() {
         Random rnd = new Random();
         while(running)
         {
@@ -55,8 +58,13 @@ public class TrapSender implements Runnable{
                     if (rsu.SendTrap)
                     {
                         rsu.agent.sendTrap();
-                        log.appendText("Trap sent: " + rsu.IP + "/" + rsu.Port + " --> " + rsu.TrapAddress + "\n");
-                        Thread.sleep(periodicity + (rnd.nextInt((maxVariance-minVarinace)+1) + minVarinace));
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                log.appendText("Trap sent: " + rsu.IP + "/" + rsu.Port + " --> " + rsu.TrapAddress + "\n");
+                            }
+                        });
+                        Thread.sleep(periodicity + (rnd.nextInt((maxVariance - minVarinace) + 1) + minVarinace));
                     }
                 }
 
@@ -64,14 +72,19 @@ public class TrapSender implements Runnable{
             }
             catch (InterruptedException e)
             {
-                e.printStackTrace();
+                if (isCancelled())
+                    running = false;
+                else
+                    e.printStackTrace();
             }
 
         }
+        return null;
     }
 
     public void shutdown()
     {
         running = false;
     }
+
 }

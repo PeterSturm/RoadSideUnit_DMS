@@ -114,7 +114,7 @@ public class Controller {
         @Override
         public void handle(final ActionEvent event) {
             Button btn = (Button) event.getSource();
-            int id = Integer.parseInt(btn.getId().substring(btn.getId().length()-1));
+            int id = Integer.parseInt(btn.getId().split("_")[1]);
 
             RSUAgent rsu = rsus.get(id);
 
@@ -154,7 +154,7 @@ public class Controller {
         @Override
         public void handle(final ActionEvent event) {
             Button btn = (Button) event.getSource();
-            int id = Integer.parseInt(btn.getId().substring(btn.getId().length()-1));
+            int id = Integer.parseInt(btn.getId().split("_")[1]);
 
             RSUAgent rsu = rsus.get(id);
 

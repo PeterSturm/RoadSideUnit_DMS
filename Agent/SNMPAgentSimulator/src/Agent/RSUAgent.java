@@ -33,7 +33,7 @@ public class RSUAgent
     public boolean Running;
     public boolean SendTrap;
 
-    public RSUAgent(String ip, String port, String trapaddress, String trapuser, String trapauth, String trappriv, double lat, double lon, double elv) {
+    public RSUAgent(String ip, String port, String trapaddress, String trapuser, String trapauth, String trappriv, double lat, double lon, double elv, int freqdef, int freqsec, int bandwdef, int bandwsec, String[] modules) {
         IP = ip;
         Port = port;
         TrapAddress = trapaddress;
@@ -42,9 +42,20 @@ public class RSUAgent
         TrapPriv = trappriv;
 
         mibObjects = new ArrayList<MibObject>();
-        mibObjects.add(new MibObject("6", MibObject.SNMPType.Integer32, lat * 1000000));
-        mibObjects.add(new MibObject("7", MibObject.SNMPType.Integer32, lon * 1000000));
-        mibObjects.add(new MibObject("8", MibObject.SNMPType.Integer32, elv * 1000000));
+        //GPS
+        mibObjects.add(new MibObject("6", MibObject.SNMPType.Integer32, (int)(lat * 1000000)));
+        mibObjects.add(new MibObject("7", MibObject.SNMPType.Integer32, (int)(lon * 1000000)));
+        mibObjects.add(new MibObject("8", MibObject.SNMPType.Integer32, (int)(elv * 1000000)));
+        //Frequency
+        mibObjects.add(new MibObject("9", MibObject.SNMPType.Integer32, freqdef));
+        mibObjects.add(new MibObject("10", MibObject.SNMPType.Integer32, freqsec));
+        //Bandwidth
+        mibObjects.add(new MibObject("13", MibObject.SNMPType.Integer32, bandwdef));
+        mibObjects.add(new MibObject("14", MibObject.SNMPType.Integer32, bandwsec));
+        //Modules
+        int i = 15;
+        for (String module : modules)
+            mibObjects.add(new MibObject(String.format("%d", i++), MibObject.SNMPType.OctetString, module));
 
         Running = false;
         SendTrap = false;
@@ -80,17 +91,65 @@ public class RSUAgent
 
             for (String info : infos)
             {
+                // GPS
                 if (info.contains("**manual-latitude"))
                     mibObjects.add(new MibObject("6"
                             , MibObject.SNMPType.Integer32
                             , Integer.parseInt(info.split("=")[1])));
-                if (info.contains("**manual-longitude"))
+                else if (info.contains("**manual-longitude"))
                     mibObjects.add(new MibObject("7"
                             , MibObject.SNMPType.Integer32
                             , Integer.parseInt(info.split("=")[1])));
-                if (info.contains("  manual-altitude"))
+                else if (info.contains("  manual-altitude"))
                     mibObjects.add(new MibObject("8"
                             , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                // Frequencies
+                else if (info.contains(("  if1-frequency")))
+                    mibObjects.add(new MibObject("9"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  if2-frequency")))
+                    mibObjects.add(new MibObject("10"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                // Bandwidth
+                else if (info.contains(("  if1-if3-bandwidth")))
+                    mibObjects.add(new MibObject("13"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  if2-if4-bandwidth")))
+                    mibObjects.add(new MibObject("14"
+                            , MibObject.SNMPType.Integer32
+                            , Integer.parseInt(info.split("=")[1])));
+                // Modules
+                else if (info.contains(("  module-cam")))
+                    mibObjects.add(new MibObject("15"
+                            , MibObject.SNMPType.OctetString
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  module-denm")))
+                    mibObjects.add(new MibObject("16"
+                            , MibObject.SNMPType.OctetString
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  module-map")))
+                    mibObjects.add(new MibObject("17"
+                            , MibObject.SNMPType.OctetString
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  module-spat")))
+                    mibObjects.add(new MibObject("18"
+                            , MibObject.SNMPType.OctetString
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  module-bsm")))
+                    mibObjects.add(new MibObject("19"
+                            , MibObject.SNMPType.OctetString
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  module-ldm")))
+                    mibObjects.add(new MibObject("20"
+                            , MibObject.SNMPType.OctetString
+                            , Integer.parseInt(info.split("=")[1])));
+                else if (info.contains(("  module-wsm")))
+                    mibObjects.add(new MibObject("21"
+                            , MibObject.SNMPType.OctetString
                             , Integer.parseInt(info.split("=")[1])));
             }
 
