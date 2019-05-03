@@ -32,51 +32,62 @@ namespace SNMPManager.Infrastructure
 
         public List<MIBObject> Get(RSU rsu, Core.Entities.User user, string OID)
         {
-            IPEndPoint receiver = new IPEndPoint(rsu.IP, rsu.Port);
-            int timeout = _managerSettings.Timeout;
+            List<MIBObject> mibObjects;
 
-            Discovery discovery = Messenger.GetNextDiscovery(SnmpType.GetRequestPdu);
-            ReportMessage report = discovery.GetResponse(timeout, receiver);
-
-            var auth = new SHA1AuthenticationProvider(new Lextm.SharpSnmpLib.OctetString(user.SNMPv3Auth));
-            var priv = new DESPrivacyProvider(new Lextm.SharpSnmpLib.OctetString(user.SNMPv3Priv), auth);
-
-            GetRequestMessage request = new GetRequestMessage(VersionCode.V3
-                , Messenger.NextMessageId
-                , Messenger.NextRequestId
-                , new OctetString(user.UserName)
-                , new OctetString(String.Empty)
-                , new List<Variable> { new Variable(new ObjectIdentifier(OID)) }
-                , priv
-                , Messenger.MaxMessageSize
-                , report);
-
-            ISnmpMessage reply = request.GetResponse(timeout, receiver);
-
-            // Need to send again (RFC 3414)???
-            if (reply is ReportMessage)
+            try
             {
-                //throw new ReplyIsReportMessage();
-                request = new GetRequestMessage(VersionCode.V3
-                                                , Messenger.NextMessageId
-                                                , Messenger.NextRequestId
-                                                , new OctetString(user.UserName)
-                                                , new OctetString(String.Empty)
-                                                , new List<Variable> { new Variable(new ObjectIdentifier(OID)) }
-                                                , priv
-                                                , Messenger.MaxMessageSize
-                                                , reply);
+                IPEndPoint receiver = new IPEndPoint(rsu.IP, rsu.Port);
+                int timeout = _managerSettings.Timeout;
 
-                reply = request.GetResponse(timeout, receiver);
-                if (reply.Pdu().ErrorStatus.ToInt32() != 0)
+                Discovery discovery = Messenger.GetNextDiscovery(SnmpType.GetRequestPdu);
+                ReportMessage report = discovery.GetResponse(timeout, receiver);
+
+                var auth = new SHA1AuthenticationProvider(new Lextm.SharpSnmpLib.OctetString(user.SNMPv3Auth));
+                var priv = new DESPrivacyProvider(new Lextm.SharpSnmpLib.OctetString(user.SNMPv3Priv), auth);
+
+                GetRequestMessage request = new GetRequestMessage(VersionCode.V3
+                    , Messenger.NextMessageId
+                    , Messenger.NextRequestId
+                    , new OctetString(user.UserName)
+                    , new OctetString(String.Empty)
+                    , new List<Variable> { new Variable(new ObjectIdentifier(OID)) }
+                    , priv
+                    , Messenger.MaxMessageSize
+                    , report);
+
+                ISnmpMessage reply = request.GetResponse(timeout, receiver);
+
+                // Need to send again (RFC 3414)???
+                if (reply is ReportMessage)
+                {
+                    //throw new ReplyIsReportMessage();
+                    request = new GetRequestMessage(VersionCode.V3
+                                                    , Messenger.NextMessageId
+                                                    , Messenger.NextRequestId
+                                                    , new OctetString(user.UserName)
+                                                    , new OctetString(String.Empty)
+                                                    , new List<Variable> { new Variable(new ObjectIdentifier(OID)) }
+                                                    , priv
+                                                    , Messenger.MaxMessageSize
+                                                    , reply);
+
+                    reply = request.GetResponse(timeout, receiver);
+                    if (reply.Pdu().ErrorStatus.ToInt32() != 0)
+                        throw new SnmpGetError();
+                }
+                else if (reply.Pdu().ErrorStatus.ToInt32() != 0)
                     throw new SnmpGetError();
+
+                mibObjects = SNMPVariables2MIBObjects(reply.Pdu().Variables);
+
+                return mibObjects;
             }
-            else if (reply.Pdu().ErrorStatus.ToInt32() != 0)
-                throw new SnmpGetError();
-
-            List<MIBObject> mibObjects = SNMPVariables2MIBObjects(reply.Pdu().Variables);
-
-            return mibObjects;
+            catch (Lextm.SharpSnmpLib.Messaging.TimeoutException ex)
+            {
+                mibObjects = new List<MIBObject>();
+                mibObjects.Add(new MIBObject("0", SnmpType.OctetString, "Timeout"));
+                return mibObjects;
+            }
 
         }
 
