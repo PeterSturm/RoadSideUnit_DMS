@@ -71,29 +71,39 @@ namespace SNMPManager.Infrastructure
                 RSU rsu = contextService.GetRSU().SingleOrDefault(r => r.IP.ToString() == e.Sender.Address.ToString()
                                                                      && r.Port == e.Sender.Port);
 
-                //int? rsuid = rsu?.Id;
-
                 // Registrate new RSU +
                 if (rsu == null)
-                {
+                { 
                     bool success = contextService.AddRSU(new RSU
-                    {
-                        Name = "Unnamed",
-                        IP = e.Sender.Address,
-                        Port = e.Sender.Port,
-                        //Latitude = 0.0,
-                        //Longitude = 0.0, 
-                        Active = true,
-                        MIBVersion = "unknown",
-                        FirmwareVersion = "unknown",
-                        LocationDescription = "unknown",
-                        Manufacturer = "unknown",
-                        NotificationIP = ownIP,
-                        NotificationPort = listenerPort
-                    });
+                        {
+                            Name = "Unnamed",
+                            IP = e.Sender.Address,
+                            Port = e.Sender.Port,
+                            Active = true,
+                            MIBVersion = "unknown",
+                            FirmwareVersion = "unknown",
+                            LocationDescription = "unknown",
+                            Manufacturer = "unknown",
+                            NotificationIP = ownIP,
+                            NotificationPort = listenerPort
+                        });
                     if (success)
                     {
                         rsu = contextService.GetRSU().Single(r => r.IP == e.Sender.Address && r.Port == e.Sender.Port);
+                        // Get the unknow rsu latitude and longitude values and assign it to the rsu
+                        var snmpService = scope.ServiceProvider.GetRequiredService<ISNMPManagerService>();
+                        snmpService.Configure(contextService.GetManagerSettings());
+
+                        var mibo = snmpService.Get(rsu, contextService.GetUser("admin"), "0.1.15628.4.1.8.6").FirstOrDefault();
+                        double lat = (double.TryParse(mibo.Value, out lat)) ? lat / 1000000 : 0.0;
+
+                        mibo = snmpService.Get(rsu, contextService.GetUser("admin"), "0.1.15628.4.1.8.7").FirstOrDefault();
+                        double lon = (double.TryParse(mibo.Value, out lon)) ? lon / 1000000 : 0.0;
+
+                        rsu.Latitude = lat;
+                        rsu.Longitude = lon;
+                        contextService.UpdateRSU(rsu);
+
                         contextService.AddManagerLog(new ManagerLog(DateTime.Now, LogType.DB, $"Registered new RSU with id: {rsu.Id}"));
                     }
                     else
