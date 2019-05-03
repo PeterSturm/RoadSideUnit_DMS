@@ -1,0 +1,57 @@
+﻿@page
+@model DashboardWebApp.Pages.RSUs.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>RSU @Model.RSU.Rsu.Name</h1>
+<h2>@($"{Model.RSU.Rsu.IP}/{Model.RSU.Rsu.Port}")</h2>
+<hr />
+
+<div>
+    <div class="row">
+        <div class="col-lg-6">
+            <h4 class="text-info">Position</h4>
+            <dl class="row">
+                <dt class="col-sm-5">Latitude</dt>
+                <dd class="col-sm-7">@Model.RSU.Rsu.Latitude</dd>
+                <dt class="col-sm-5">Longitude</dt>
+                <dd class="col-sm-7">@Model.RSU.Rsu.Longitude</dd>
+                <dt class="col-sm-5">Altitude</dt>
+                <dd class="col-sm-7">@Model.RSU.Elevation</dd>
+                <dt class="col-sm-5">Location Description</dt>
+                <dd class="col-sm-7">@Model.RSU.Rsu.LocationDescription</dd>
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            <h4 class="text-info">Frequency/Bandwidth</h4>
+            <dl class="row">
+                <dt class="col-sm-5">Frequency default</dt>
+                <dd class="col-sm-7">@Model.RSU.FrequencyDefault</dd>
+                <dt class="col-sm-5">Frequency secondary</dt>
+                <dd class="col-sm-7">@Model.RSU.FrequencySecondary</dd>
+                <dt class="col-sm-5">Bandwidth default</dt>
+                <dd class="col-sm-7">@Model.RSU.BandwidthDefault MHz</dd>
+                <dt class="col-sm-5">Bandwidth secondary</dt>
+                <dd class="col-sm-7">@Model.RSU.BandwidthSecondary MHz</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <h4 class="text-info">Moduls</h4>
+            <dl class="row">
+                <dt class="col-sm-7">CAM</dt>
+                <dd class="col-sm-5">@((@Model.RSU.Cam) ? "ON" : "OFF")</dd>
+                <dt class="col-sm-7">DENM</dt>
+                <dd class="col-sm-5">@((@Model.RSU.Denm) ? "ON" : "OFF")</dd>
+                <dt class="col-sm-7">LDM</dt>
+                <dd class="col-sm-5">@((@Model.RSU.Ldm) ? "ON" : "OFF")</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<hr />
+@await Component.InvokeAsync("SNMPGet", Model.snmpGETModel)

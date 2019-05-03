@@ -66,6 +66,34 @@ namespace DashboardWebApp.Pages
             }
         }
 
+        public IActionResult OnGetDownRsus()
+        {
+            List<RSU> downrsus = new List<RSU>();
+
+            var user = _applicationDbContext.Users
+                .Include(u => u.UserManagerUsers)
+                .FirstOrDefault(u => u.UserName == HttpContext.User.Identity.Name);
+
+            var managers = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .ToList();
+            if (managers != null)
+            {
+                // Get all the Inactive RSUs for the DownRSU component
+                foreach (var manager in managers)
+                {
+                    var managerUser = user.UserManagerUsers.FirstOrDefault(umu => umu.ManagerUserManagerId == manager.Id)?.ManagerUser;
+                    if (managerUser != null)
+                    {
+                        var rsus = _rsuService.GetAsync(managerUser).Result;
+                        if (rsus != null)
+                            downrsus.AddRange(rsus.Where(r => r.Active == false));
+                    }
+                }
+            }
+            return ViewComponent("DashboardDownRSUs", downrsus);
+        }
+
         public JsonResult OnGetRsus(double lat, double lon)
         {
             var manager = _applicationDbContext.Managers

@@ -1,0 +1,37 @@
+﻿@model DashboardWebApp.ViewModels.RSU.SnmpGETModel
+
+<h4 class="text-info">SNMP GET</h4>
+
+<div class="row">
+    <div class="col-md-9">
+        <form method="post">
+            <div class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ManagerId" />
+                <input type="hidden" asp-for="RsuId" />
+                <div class="col-sm-1"><label asp-for="OID" class="col-form-label"></label></div>
+                <div class="col-md-8">
+                    <input asp-for="OID" class="form-control" />
+                    <span asp-validation-for="OID" danger=""></span>
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="GET" class="btn" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        @if (Model.Value != null)
+        {
+        @*<div class="row">
+            <div class="col-md-4">Type</div>
+            <div class="col-md-4">Value</div>
+        </div>*@
+        <div class="row">
+            <div class="col-md-6">@Model.Type</div>
+            <div class="col-md-6">@Model.Value</div>
+        </div>
+        }
+    </div>
+</div>
+

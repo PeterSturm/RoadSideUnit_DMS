@@ -16,10 +16,23 @@
         </div>
             <div class="col-md-4">
                 <div class="row h4 text-center"><div class="col-12">Inactive RSUs</div></div>
-                <div class="row"><div class="col-12">@await Component.InvokeAsync("DashboardDownRSUs", Model.Dashboard.DownRSUs)</div></div>
+                <div class="row"><div class="col-12" id="downrsus">@await Component.InvokeAsync("DashboardDownRSUs", Model.Dashboard.DownRSUs)</div></div>
             </div>
 
             </div>
-        
-
 </div>
+
+@section Scripts{ 
+    <script type="text/javascript">
+        var downRsusComponent = $("#downrsus");
+        var refreshDownRsus = function () {
+            $.get("Index?handler=DownRsus", function (response) {
+                downRsusComponent.html(response);
+            });
+        }
+
+        $(function () {
+            window.setInterval(refreshDownRsus, 5000);
+        })
+    </script>
+}
