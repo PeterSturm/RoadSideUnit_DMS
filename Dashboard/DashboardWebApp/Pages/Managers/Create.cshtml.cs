@@ -33,7 +33,7 @@ namespace DashboardWebApp.Pages.Managers
             Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostManagerEditAsync()
         {
             if (!ModelState.IsValid)
                 return Page();

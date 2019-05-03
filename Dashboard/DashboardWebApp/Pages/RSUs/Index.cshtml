@@ -13,21 +13,21 @@
         <a asp-page="./Create">Create</a>
     </p>*@
 
-<table class="table /*table-sm*/ table-hover">
+<table class="table table-hover">
     <thead class="thead-dark">
         <tr>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].Name)</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].IP) / @Html.DisplayNameFor(model => model.RSUs[0].Port)</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].Manager)</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].Manager) @Html.DisplayNameFor(model => model.RSUs[0].Manager.IP) / @Html.DisplayNameFor(model => model.RSUs[0].Manager.Port)</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].NotificationIP) / Port</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].Latitude)</td>
-            <td>@Html.DisplayNameFor(model => model.RSUs[0].Longitude)</td>
-            <td>Status</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].Name)</th>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].IP) / @Html.DisplayNameFor(model => model.RSUs[0].Port)</th>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].Manager)</th>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].Manager) @Html.DisplayNameFor(model => model.RSUs[0].Manager.IP) / @Html.DisplayNameFor(model => model.RSUs[0].Manager.Port)</th>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].NotificationIP) / Port</th>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].Latitude)</th>
+            <th>@Html.DisplayNameFor(model => model.RSUs[0].Longitude)</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

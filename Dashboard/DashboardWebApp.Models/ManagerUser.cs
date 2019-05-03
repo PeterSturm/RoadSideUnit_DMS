@@ -26,7 +26,9 @@ namespace DashboardWebApp.Models
         {
             Manager = manager;
             Name = "admin";
-            Token = "Adminpass01";           
+            Token = "Adminpass01";
+            SnmPv3Auth = "authpass012";
+            SnmPv3Priv = "privpass012";
         }
 
         public static ManagerUser Parse(UserDto userdto, Manager manager)

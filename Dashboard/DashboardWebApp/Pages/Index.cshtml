@@ -5,17 +5,18 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">RSU Device Manager</h1>
-    <p>Device Manager System for C-ITS RSUs</p>
+    <h1 class="font-weight-bold">RSU Device Manager</h1>
+    <h4>Device Manager System for C-ITS RSUs</h4>
+    <hr />
     <div class="row">
         <div class="col-lg-8">
-            <div class="row h4 text-center"><div class="col-12">Managers</div></div>
+            <div class="row h4 text-center font-weight-bold"><div class="col-12">Managers</div></div>
             <div class="row">
                 <div class="col-12"> @await Component.InvokeAsync("DashboardMap", Model.Dashboard.MapNodes) </div>
             </div>
         </div>
             <div class="col-md-4">
-                <div class="row h4 text-center"><div class="col-12">Inactive RSUs</div></div>
+                <div class="row h4 text-center font-weight-bold"><div class="col-12">Inactive RSUs</div></div>
                 <div class="row"><div class="col-12" id="downrsus">@await Component.InvokeAsync("DashboardDownRSUs", Model.Dashboard.DownRSUs)</div></div>
             </div>
 

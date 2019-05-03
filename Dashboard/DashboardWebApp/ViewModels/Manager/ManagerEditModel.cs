@@ -12,7 +12,7 @@ namespace DashboardWebApp.ViewModels.Manager
             get { return IP.ToString(); }
             set { IP = IPAddress.Parse(value); }
         }
-        public List<ManagerUserEditModel> ManagerUserEditModels { get; set; }
+        //public List<ManagerUserEditModel> ManagerUserEditModels { get; set; }
 
         public static ManagerEditModel Parse(Models.Manager manager)
         {
@@ -25,7 +25,7 @@ namespace DashboardWebApp.ViewModels.Manager
                 Latitude = manager.Latitude,
                 Longitude = manager.Longitude,
                 Users = manager.Users,
-                ManagerUserEditModels = manager.Users.Select(mu => new ManagerUserEditModel(mu)).ToList()
+                //ManagerUserEditModels = manager.Users.Select(mu => new ManagerUserEditModel(mu)).ToList()
             };
         }
 
@@ -37,9 +37,9 @@ namespace DashboardWebApp.ViewModels.Manager
                 manager.Name = Name;
                 manager.IP = IP;
                 manager.Port = Port;
-                manager.Latitude = manager.Latitude;
-                manager.Longitude = manager.Longitude;
-                manager.Users = Users;
+                manager.Latitude = Latitude;
+                manager.Longitude = Longitude;
+                //manager.Users = Users;
             }
             else
             {

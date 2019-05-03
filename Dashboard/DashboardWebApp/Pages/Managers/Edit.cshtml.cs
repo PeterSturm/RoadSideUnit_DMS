@@ -28,7 +28,9 @@ namespace DashboardWebApp.Pages.Managers
         }
 
         [BindProperty]
-        public ManagerEditModel ManagerEditM { get; set; }
+        public ManagerEditModel ManagerEditModel { get; set; }
+        [BindProperty]
+        public List<ManagerUserEditModel> ManagerUserEditModels { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -41,28 +43,24 @@ namespace DashboardWebApp.Pages.Managers
             if (manager == null)
                 return NotFound();
 
-            ManagerEditM = ManagerEditModel.Parse(manager);
+            ManagerEditModel = ManagerEditModel.Parse(manager);
+            ManagerUserEditModels = manager.Users.Select(mu => new ManagerUserEditModel(mu)).ToList();
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostManagerEditAsync()
         {
             if (!ModelState.IsValid)
                 return Page();
 
             var manager = _applicationDbContext.Managers
                 .Include(m => m.Users)
-                .SingleOrDefault(m => m.Id == ManagerEditM.Id);
+                .SingleOrDefault(m => m.Id == ManagerEditModel.Id);
             if (manager == null)
                 return NotFound();
 
-            /*foreach (var managerUser in ManagerEditM.Users)
-            {
-            // TODO
-            }*/
-
-            manager = ManagerEditM.MapToManager(manager);
+            manager = ManagerEditModel.MapToManager(manager);
 
             _applicationDbContext.Managers.Update(manager);
             await _applicationDbContext.SaveChangesAsync();
@@ -72,23 +70,45 @@ namespace DashboardWebApp.Pages.Managers
 
         public void ChangeManagerUserStatus(int id, Status newStatus)
         {
-            var managerUserEM = ManagerEditM.ManagerUserEditModels.SingleOrDefault(mu => mu.Id == id);
+            var managerUserEM = ManagerUserEditModels.SingleOrDefault(mu => mu.Id == id);
             if (managerUserEM != null)
                 managerUserEM.Status = newStatus;
         }
 
-        public void AddManagerUser()
+        public async Task<IActionResult> OnPostAddManagerUser()
         {
             ManagerUserEditModel newManagerUserEditModel = new ManagerUserEditModel();
             newManagerUserEditModel.Status = Status.CREATED;
-            newManagerUserEditModel.ManagerId = ManagerEditM.Id;
+            newManagerUserEditModel.ManagerId = ManagerEditModel.Id;
             newManagerUserEditModel.Manager = _applicationDbContext.Managers
                 .Include(m => m.Users)
-                .SingleOrDefault(m => m.Id == ManagerEditM.Id);
+                .SingleOrDefault(m => m.Id == ManagerEditModel.Id);
 
-            ManagerEditM.ManagerUserEditModels.Add(newManagerUserEditModel);
+            ManagerUserEditModels.Add(newManagerUserEditModel);
 
-            Page();
+            return RedirectToPage("./Edit", newManagerUserEditModel.ManagerId);
+        }
+
+        public async Task<IActionResult> OnPostManagerUsersAsync()
+        {
+
+            var manager = _applicationDbContext.Managers
+                .Include(m => m.Users)
+                .FirstOrDefault(m => m.Id == ManagerUserEditModels[0].ManagerId);
+
+            foreach (var manageruser in ManagerUserEditModels)
+            {
+                var manageruserold = manager.Users.Find(mu => mu.Id == manageruser.Id);
+                manageruserold.Name = manageruser.Name;
+                manageruserold.Token = manageruser.Token;
+                manageruserold.SnmPv3Auth = manageruser.SnmPv3Auth;
+                manageruserold.SnmPv3Priv = manageruser.SnmPv3Priv;
+            }
+
+            _applicationDbContext.Managers.Update(manager);
+            await _applicationDbContext.SaveChangesAsync();
+
+            return RedirectToPage("./Edit", manager.Id);
         }
     }
 }

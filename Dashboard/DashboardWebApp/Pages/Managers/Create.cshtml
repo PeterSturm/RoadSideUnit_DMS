@@ -9,13 +9,6 @@
 
 <h4>Manager</h4>
 <br />
-<form method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    @await Component.InvokeAsync("EditManager", Model.Manager)
-    <div class="row">
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn" />
-        </div>
-    </div>
-</form>
+<div asp-validation-summary="ModelOnly"></div>
+@await Component.InvokeAsync("EditManager", Model.Manager)
 

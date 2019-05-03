@@ -11,22 +11,25 @@
 <h4>Manager Users</h4>
 <br />
 <form method="post">
-    <label class="custom-control-label">Manager</label>
-    <select asp-for="@Model.AddManagerUser.ManagerUserManagerId" asp-items="@Model.AddManagerUser.Managers"></select>
-    <select asp-for="@Model.AddManagerUser.ManagerUserUserId"></select>
-    <input type="submit" value="Add" class="btn" />
+    <div class="row">
+        <label class="col-form-label col-md-1">Manager</label>
+        <select asp-for="@Model.AddManagerUser.ManagerUserManagerId" asp-items="@Model.AddManagerUser.Managers" class="form-control col-md-3"></select>
+        <select asp-for="@Model.AddManagerUser.ManagerUserUserId" class="form-control col-md-3"></select>
+        <input type="submit" value="Add" class="btn col-md-1" />
+    </div>
 </form>
+<br />
 <div class="row">
     <div class="col-lg-12">
         @if (Model.User.ManagerUsers != null && Model.User.ManagerUsers.Count != 0)
         {
             <table class="table">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
-                        <td><label asp-for="@Model.User.ManagerUsers[0].Manager"></label></td>
-                        <td><label asp-for="@Model.User.ManagerUsers[0].Manager.IP"></label></td>
-                        <td><label asp-for="@Model.User.ManagerUsers[0].Name"></label></td>
-                        <td><label asp-for="@Model.User.ManagerUsers[0].Role"></label></td>
+                        <th><label asp-for="@Model.User.ManagerUsers[0].Manager"></label></th>
+                        <th><label asp-for="@Model.User.ManagerUsers[0].Manager.IP"></label></th>
+                        <th><label asp-for="@Model.User.ManagerUsers[0].Name"></label></th>
+                        <th><label asp-for="@Model.User.ManagerUsers[0].Role"></label></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +51,7 @@
 
 @section Scripts{ 
     <script type="text/javascript">
-        $("#AddManagerUser_ManagerUserManagerId").change(function () {
+        function loadmanageusers() {
             var selectedManager = $("#AddManagerUser_ManagerUserManagerId").val();
             var managerUserSelect = $("#AddManagerUser_ManagerUserUserId");
             managerUserSelect.empty();
@@ -59,7 +62,8 @@
                 contentType: "application/json",
                 dataType: 'json',
                 data: {
-                    managerId: selectedManager},
+                    managerId: selectedManager
+                },
                 success: function (response) {
                     if (response != null && !jQuery.isEmptyObject(response)) {
                         $.each(response, function (index, manageruser) {
@@ -73,6 +77,9 @@
                 failure: function (response) {
                 }
             });
-        });
+        };
+
+        $("#AddManagerUser_ManagerUserManagerId").change(loadmanageusers());
+        document.onload = loadmanageusers();
     </script>
 }

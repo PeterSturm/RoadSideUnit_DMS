@@ -1,36 +1,52 @@
 ﻿@model DashboardWebApp.ViewModels.Manager.ManagerEditModel
 
-@if (Model != null)
-{
-    <input type="hidden" asp-for="Id" />
-}
+<hr />
+<form method="post" asp-page-handler="ManagerEdit">
+    @if (Model != null)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+        <div class="row">
+            <div class="col-lg-6 pr-5">
+                <h4 class="text-info">General</h4>
+                <div class="row">
+                    <label asp-for="Name" class="col-form-label col-md-4"></label>
+                    <input asp-for="Name" class="form-control col-md-8" />
+                    <span asp-validation-for="Name" danger=""></span>
+                </div>
+                <br />
+                <h4 class="text-info">Network</h4>
+                <div class="row">
+                    <label asp-for="IP" class="col-form-label col-md-4"></label>
+                    <input asp-for="ip" class="form-control col-md-8" />
+                    <span asp-validation-for="ip" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <label asp-for="Port" class="col-form-label col-md-4"></label>
+                    <input asp-for="Port" class="form-control col-md-8" />
+                    <span asp-validation-for="Port" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-6 pl-5">
+                <h4 class="text-info">Position</h4>
+                <div class="row">
+                    <label asp-for="Latitude" class="col-form-label col-md-4"></label>
+                    <input asp-for="Latitude" class="form-control col-md-8" />
+                    <span asp-validation-for="Latitude" class="text-danger"></span>
+                </div>
 
-<div class="form-group">
-    <label asp-for="Name" class="custom-control-label"></label>
-    <input asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" danger=""></span>
-</div>
+                <div class="row">
+                    <label asp-for="Longitude" class="col-form-label col-md-4"></label>
+                    <input asp-for="Longitude" class="form-control col-md-8" />
+                    <span asp-validation-for="Longitude" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
 
-<div class="form-group">
-    <label asp-for="IP" class="custom-control-label"></label>
-    <input asp-for="ip" class="form-control" />
-    <span asp-validation-for="ip" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="Port" class="custom-control-label"></label>
-    <input asp-for="Port" class="form-control" />
-    <span asp-validation-for="Port" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="Latitude" class="custom-control-label"></label>
-    <input asp-for="Latitude" class="form-control" />
-    <span asp-validation-for="Latitude" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="Longitude" class="custom-control-label"></label>
-    <input asp-for="Longitude" class="form-control" />
-    <span asp-validation-for="Longitude" class="text-danger"></span>
-</div>
+        <br />
+        <div class="row">
+            <div class="col-lg-6 pr-5">
+                <input type="submit" value="Save" class="btn" />
+            </div>
+        </div>
+</form>

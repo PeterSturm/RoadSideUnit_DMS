@@ -2,74 +2,81 @@
 
 
 
-   <button type="button" class="btn" asp-action="AddManagerUser">Add</button>
+@*@<form method="post" asp-page-handler="AddManagerUser">
+    <button class="btn">Add</button>
+</form>*@
 
-<table class="table">
-    <thead>
-        <tr>
-            <td><label asp-for="@Model[0].Name" class="custom-control-label"></label></td>
-            <td><label asp-for="@Model[0].Token" class="custom-control-label"></label></td>
-            <td><label asp-for="@Model[0].Role" class="custom-control-label"></label></td>
-            <td><label asp-for="@Model[0].SnmPv3Auth" class="custom-control-label"></label></td>
-            <td><label asp-for="@Model[0].SnmPv3Priv" class="custom-control-label"></label></td>
-            <td></td>
-            <td width="0"></td>
-        </tr>
-    </thead>
-    @{/*<div class="col-sm-4">
-<div class="form-group">
-<label asp-for="@managerUser.ManagerId" class="custom-control-label"></label>
-<input asp-for="@managerUser.ManagerId" class="form-control" />
-<span asp-validation-for="@managerUser.ManagerId" class="text-danger"></span>
-</div>
-</div>*/
-    }
-    <tbody>
-        @foreach (var managerUser in Model)
-        {
-        <tr>
-            <td>
-                <div class="form-group">
-                    <input asp-for="@managerUser.Name" class="form-control" />
-                    <span asp-validation-for="@managerUser.Name" danger=""></span>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <input asp-for="@managerUser.Token" class="form-control" />
-                    <span asp-validation-for="@managerUser.Token" class="text-danger"></span>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <input asp-for="@managerUser.Role" class="form-control" />
-                    <span asp-validation-for="@managerUser.Role" class="text-danger"></span>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <input asp-for="@managerUser.SnmPv3Auth" class="form-control" />
-                    <span asp-validation-for="@managerUser.SnmPv3Auth" class="text-danger"></span>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <input asp-for="@managerUser.SnmPv3Priv" class="form-control" />
-                    <span asp-validation-for="@managerUser.SnmPv3Priv" class="text-danger"></span>
-                </div>
-            </td>
-            <td>
-                @{/*<a asp-action="ChangeManagerUserStatus" asp-route-id="@managerUser.Id" asp-route-newStatus="MODIFIED">Modify</a> |
-                    <a asp-action="ChangeManagerUserStatus" asp-route-id="@managerUser.Id" asp-route-newStatus="DELETED">Delete</a>}*/
-                }
-            </td>
+@*<button type="button" class="btn" asp-page-handler="AddManagerUser">Add</button>*@
 
-
-            <td width="0" class="m-0 p-0">
-                <input type="hidden" asp-for="@managerUser.ManagerId" class="m-0 p-0"/>
-                <input type="hidden" asp-for="@managerUser.Id" class="m-0 p-0"/>
-            </td>
-        </tr>
+<form method="post" asp-page-handler="ManagerUsers">
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th><label asp-for="@Model[0].Name" class="col-form-label"></label></th>
+                <th><label asp-for="@Model[0].Token" class="col-form-label"></label></th>
+                <th><label asp-for="@Model[0].Role" class="col-form-label"></label></th>
+                <th><label asp-for="@Model[0].SnmPv3Auth" class="col-form-label"></label></th>
+                <th><label asp-for="@Model[0].SnmPv3Priv" class="col-form-label"></label></th>
+                <th></th>
+                <th width="0"></th>
+            </tr>
+        </thead>
+        @{/*<div class="col-sm-4">
+            <div class="form-group">
+            <label asp-for="@Model[i].ManagerId" class="custom-control-label"></label>
+            <input asp-for="@Model[i].ManagerId" class="form-control" />
+            <span asp-validation-for="@Model[i].ManagerId" class="text-danger"></span>
+            </div>
+            </div>*/
         }
-    </tbody>
-</table>
+        <tbody>
+            @for(int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model[i].Name" class="form-control" />
+                            <span asp-validation-for="@Model[i].Name" danger=""></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model[i].Token" class="form-control" />
+                            <span asp-validation-for="@Model[i].Token" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model[i].Role" class="form-control" />
+                            <span asp-validation-for="@Model[i].Role" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model[i].SnmPv3Auth" class="form-control" />
+                            <span asp-validation-for="@Model[i].SnmPv3Auth" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input asp-for="@Model[i].SnmPv3Priv" class="form-control" />
+                            <span asp-validation-for="@Model[i].SnmPv3Priv" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        @{/*<a asp-action="ChangeManagerUserStatus" asp-route-id="@Model[i].Id" asp-route-newStatus="MODIFIED">Modify</a> |
+                                    <a asp-action="ChangeManagerUserStatus" asp-route-id="@Model[i].Id" asp-route-newStatus="DELETED">Delete</a>}*/
+                        }
+                    </td>
+
+
+                    <td width="0" class="m-0 p-0">
+                        <input type="hidden" asp-for="@Model[i].ManagerId" class="m-0 p-0" />
+                        <input type="hidden" asp-for="@Model[i].Id" class="m-0 p-0" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*<input type="submit" class="btn" value="Save"/>*@
+</form>

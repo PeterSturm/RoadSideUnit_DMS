@@ -9,18 +9,21 @@
 <h1>Managers</h1>
 
 <p>
-    <a asp-page="./Create">Create</a>
+    <form method="get">
+        <button type="submit" asp-page="./Create" class="btn">Create</button>
+    </form>
 </p>
 
-<table class="table">
+<table class="table table-hover">
     <thead class="thead-dark">
         <tr>
-            <td>@Html.DisplayNameFor(model => model.Managers[0].Name)</td>
-            <td>@Html.DisplayNameFor(model => model.Managers[0].IP) / @Html.DisplayNameFor(model => model.Managers[0].Port)</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th>@Html.DisplayNameFor(model => model.Managers[0].Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Managers[0].IP) / @Html.DisplayNameFor(model => model.Managers[0].Port)</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -32,10 +35,8 @@
             <td><a asp-page="../RSUs/Index" asp-route-managerId="@manager.Id">Rsus</a></td>
             <td><a asp-page="../ManagerLogs/Index" asp-route-managerId="@manager.Id">Manager Logs</a></td>
             <td><a asp-page="../TrapLogs/Index" asp-route-managerId="@manager.Id">Trap Logs</a></td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@manager.Id">Edit</a> |
-                <a asp-page="./Delete" asp-route-id="@manager.Id">Delete</a>
-            </td>
+            <td><a asp-page="./Edit" asp-route-id="@manager.Id">Edit</a></td>
+            <td><a asp-page="./Delete" asp-route-id="@manager.Id">Delete</a></td>
         </tr>
         }
     </tbody>
