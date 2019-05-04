@@ -56,11 +56,13 @@ namespace DashboardWebApp
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AuthorizeFolder("/Managers");
+                    options.Conventions.AuthorizeFolder("/");
+                    /*options.Conventions.AuthorizeFolder("/Managers");
                     options.Conventions.AuthorizeFolder("/RSUs");
                     options.Conventions.AuthorizeFolder("/ManagerLogs");
                     options.Conventions.AuthorizeFolder("/Users");
                     options.Conventions.AuthorizeFolder("/Components");
+                    options.Conventions.AuthorizeFolder("/TrapLogs");*/
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

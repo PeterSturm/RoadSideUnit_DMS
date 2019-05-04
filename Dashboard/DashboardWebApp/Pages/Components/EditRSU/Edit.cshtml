@@ -1,63 +1,69 @@
 ﻿@model DashboardWebApp.ViewModels.RSU.RSUEditModel
 
-@if (Model != null)
-{
-    <input type="hidden" asp-for="Id" />
-}
+<div class="row">
+    <div class="col-lg-6 pr5">
+        <h4 class="text-info">General</h4>
+        <div class="row">
+            <label asp-for="Name" class="col-form-label col-md-4"></label>
+            <input asp-for="Name" class="form-control col-md-8" />
+            <span asp-validation-for="Name" danger=""></span>
+        </div>
+        <br />
+        <h4 class="text-info">Network</h4>
+        <div class="row">
+            <label asp-for="ManagerIP" class="col-form-label col-md-4"></label>
+            <input asp-for="ManagerIP" class="form-control col-md-8" />
+            <span asp-validation-for="ManagerIP" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <label asp-for="ManagerPort" class="col-form-label col-md-4"></label>
+            <input asp-for="ManagerPort" class="form-control col-md-8" />
+            <span asp-validation-for="ManagerPort" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <label asp-for="NotificationIP" class="col-form-label col-md-4"></label>
+            <input asp-for="NotificationIP" class="form-control col-md-8" />
+            <span asp-validation-for="NotificationIP" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <label asp-for="NotificationPort" class="col-form-label col-md-4"></label>
+            <input asp-for="NotificationPort" class="form-control col-md-8" />
+            <span asp-validation-for="NotificationPort" class="text-danger"></span>
+        </div>
+    </div>
 
-<input type="hidden" asp-for="prevMIP" />
-<input type="hidden" asp-for="prevMPort" />
-<input type="hidden" asp-for="IP" />
-<input type="hidden" asp-for="Port" />
-<input type="hidden" asp-for="Active" />
-<input type="hidden" asp-for="MIBVersion" />
-<input type="hidden" asp-for="FirmwareVersion" />
-<input type="hidden" asp-for="Manufacturer" />
+    <div class="col-lg-6 pl-5">
+        <h4 class="text-info">Position</h4>
+        <div class="row">
+            <label asp-for="Latitude" class="col-form-label col-md-4"></label>
+            <input asp-for="Latitude" class="form-control col-md-8" />
+            <span asp-validation-for="Latitude" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <label asp-for="Longitude" class="col-form-label col-md-4"></label>
+            <input asp-for="Longitude" class="form-control col-md-8" />
+            <span asp-validation-for="Longitude" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <label asp-for="LocationDescription" class="col-form-label col-md-4"></label>
+            <input asp-for="LocationDescription" class="form-control col-md-8" />
+            <span asp-validation-for="LocationDescription" class="text-danger"></span>
+        </div>
+    </div>
 
-<div class="form-group">
-    <label asp-for="Name" class="custom-control-label"></label>
-    <input asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" danger=""></span>
-</div>
 
-<div class="form-group">
-    <label asp-for="ManagerIP" class="custom-control-label"></label>
-    <input asp-for="ManagerIP" class="form-control" />
-    <span asp-validation-for="ManagerIP" class="text-danger"></span>
-</div>
+    @if (Model != null)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
 
-<div class="form-group">
-    <label asp-for="ManagerPort" class="custom-control-label"></label>
-    <input asp-for="ManagerPort" class="form-control" />
-    <span asp-validation-for="ManagerPort" class="text-danger"></span>
-</div>
+    <input type="hidden" asp-for="prevMIP" />
+    <input type="hidden" asp-for="prevMPort" />
+    <input type="hidden" asp-for="IP" />
+    <input type="hidden" asp-for="Port" />
+    <input type="hidden" asp-for="Active" />
+    <input type="hidden" asp-for="MIBVersion" />
+    <input type="hidden" asp-for="FirmwareVersion" />
+    <input type="hidden" asp-for="Manufacturer" />
 
-<div class="form-group">
-    <label asp-for="NotificationIP" class="custom-control-label"></label>
-    <input asp-for="NotificationIP" class="form-control" />
-    <span asp-validation-for="NotificationIP" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="NotificationPort" class="custom-control-label"></label>
-    <input asp-for="NotificationPort" class="form-control" />
-    <span asp-validation-for="NotificationPort" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="Latitude" class="custom-control-label"></label>
-    <input asp-for="Latitude" class="form-control" />
-    <span asp-validation-for="Latitude" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="Longitude" class="custom-control-label"></label>
-    <input asp-for="Longitude" class="form-control" />
-    <span asp-validation-for="Longitude" class="text-danger"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="LocationDescription" class="custom-control-label"></label>
-    <input asp-for="LocationDescription" class="form-control" />
-    <span asp-validation-for="LocationDescription" class="text-danger"></span>
 </div>

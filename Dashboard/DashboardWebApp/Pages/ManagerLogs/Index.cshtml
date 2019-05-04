@@ -1,8 +1,9 @@
 ﻿@page
 @model DashboardWebApp.Pages.ManagerLogs.IndexModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Dashboard";
     Layout = "~/Pages/Shared/_Layout.cshtml";
+    var color = "";
 }
 
 <h1>Manager Logs</h1>
@@ -19,7 +20,22 @@
     <tbody>
         @foreach (var log in Model.ManagerLogs)
         {
-        <tr>
+            @switch (log.Type)
+            {
+                case "DB":
+                    color = "table-success";
+                    break;
+                case "SECURITY":
+                    color = "table-danger";
+                    break;
+                case "APICALL":
+                    color = "table-info";
+                    break;
+                default:
+                    color = "";
+                    break;
+            }
+        <tr class="@color">
             <td>@log.TimeStamp</td>
             <td>@log.Type</td>
             <td>@log.Message</td>
