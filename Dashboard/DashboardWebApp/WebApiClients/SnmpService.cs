@@ -35,22 +35,24 @@ namespace DashboardWebApp.WebApiClients
             }
         }
 
-        /*public async Task<bool> SetAsync(ManagerUser managerUser, RSU rsu)
+        public async Task<bool> SetAsync(ManagerUser managerUser, int rsuId, MIBObject mibo)
         {
             var host = GetHost(managerUser);
 
-            RsuDto rsuDto = rsu.ConvertToRSUDto();
+            MIBObjectDto miboDto = mibo.ConvertToDTO();
 
             try
             {
-                var result = await _httpClinet.PostAsJsonAsync($"http://{host}:{managerUser.Manager.Port}/{controller}/{managerUser.Name}/{managerUser.Token}", rsuDto);
-
-                return true;
+                var result = await _httpClinet.PostAsJsonAsync($"http://{host}:{managerUser.Manager.Port}/{controller}/{managerUser.Name}/{managerUser.Token}/{rsuId}", miboDto);
+                if (result.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
             }
             catch (HttpRequestException ex)
             {
                 return false;
             }
-        }*/
+        }
     }
 }

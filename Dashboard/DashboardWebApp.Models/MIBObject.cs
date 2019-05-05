@@ -30,5 +30,15 @@ namespace DashboardWebApp.Models
                 };
 
         }
+
+        public MIBObjectDto ConvertToDTO()
+        {
+            return new MIBObjectDto
+            {
+                Oid = OID,
+                Type = Type,
+                Value = Value
+            };
+        }
     }
 }

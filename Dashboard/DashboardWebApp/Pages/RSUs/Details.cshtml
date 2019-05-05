@@ -5,8 +5,8 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>RSU @Model.RSU.Rsu.Name</h1>
-<h2>@($"{Model.RSU.Rsu.IP}/{Model.RSU.Rsu.Port}")</h2>
+<h1>RSU @Model.RSUDetail.Rsu.Name</h1>
+<h2>@($"{Model.RSUDetail.Rsu.IP}/{Model.RSUDetail.Rsu.Port}")</h2>
 <hr />
 
 <div>
@@ -15,26 +15,26 @@
             <h4 class="text-info">Position</h4>
             <dl class="row">
                 <dt class="col-sm-5">Latitude</dt>
-                <dd class="col-sm-7">@Model.RSU.Rsu.Latitude</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.Rsu.Latitude</dd>
                 <dt class="col-sm-5">Longitude</dt>
-                <dd class="col-sm-7">@Model.RSU.Rsu.Longitude</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.Rsu.Longitude</dd>
                 <dt class="col-sm-5">Altitude</dt>
-                <dd class="col-sm-7">@Model.RSU.Elevation</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.Elevation</dd>
                 <dt class="col-sm-5">Location Description</dt>
-                <dd class="col-sm-7">@Model.RSU.Rsu.LocationDescription</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.Rsu.LocationDescription</dd>
             </dl>
         </div>
         <div class="col-lg-6">
             <h4 class="text-info">Frequency/Bandwidth</h4>
             <dl class="row">
                 <dt class="col-sm-5">Frequency default</dt>
-                <dd class="col-sm-7">@Model.RSU.FrequencyDefault</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.FrequencyDefault</dd>
                 <dt class="col-sm-5">Frequency secondary</dt>
-                <dd class="col-sm-7">@Model.RSU.FrequencySecondary</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.FrequencySecondary</dd>
                 <dt class="col-sm-5">Bandwidth default</dt>
-                <dd class="col-sm-7">@Model.RSU.BandwidthDefault MHz</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.BandwidthDefault MHz</dd>
                 <dt class="col-sm-5">Bandwidth secondary</dt>
-                <dd class="col-sm-7">@Model.RSU.BandwidthSecondary MHz</dd>
+                <dd class="col-sm-7">@Model.RSUDetail.BandwidthSecondary MHz</dd>
             </dl>
         </div>
     </div>
@@ -43,11 +43,11 @@
             <h4 class="text-info">Moduls</h4>
             <dl class="row">
                 <dt class="col-sm-7">CAM</dt>
-                <dd class="col-sm-5">@((@Model.RSU.Cam) ? "ON" : "OFF")</dd>
+                <dd class="col-sm-5">@((@Model.RSUDetail.Cam) ? "ON" : "OFF")</dd>
                 <dt class="col-sm-7">DENM</dt>
-                <dd class="col-sm-5">@((@Model.RSU.Denm) ? "ON" : "OFF")</dd>
+                <dd class="col-sm-5">@((@Model.RSUDetail.Denm) ? "ON" : "OFF")</dd>
                 <dt class="col-sm-7">LDM</dt>
-                <dd class="col-sm-5">@((@Model.RSU.Ldm) ? "ON" : "OFF")</dd>
+                <dd class="col-sm-5">@((@Model.RSUDetail.Ldm) ? "ON" : "OFF")</dd>
             </dl>
         </div>
     </div>
@@ -55,3 +55,5 @@
 
 <hr />
 @await Component.InvokeAsync("SNMPGet", Model.snmpGETModel)
+<hr />
+@await Component.InvokeAsync("SNMPSet", Model.snmpSETModel)

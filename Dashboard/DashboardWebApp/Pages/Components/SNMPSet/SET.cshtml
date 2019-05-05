@@ -1,0 +1,43 @@
+﻿@model DashboardWebApp.ViewModels.RSU.SnmpSETModel
+
+<h4 class="text-info">SNMP SET</h4>
+
+<div class="row">
+    <div class="col-lg-11">
+        <form method="post" asp-page-handler="SET">
+            <div class="row">
+                <label class="col-form-label col-sm-4">OID</label>
+                <label class="col-form-label col-sm-3">Type</label>
+                <label class="col-form-label col-sm-3">Value</label>
+            </div>
+            <div class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ManagerId" />
+                <input type="hidden" asp-for="RsuId" />
+                <div class="col-sm-4">
+                    <input asp-for="SET_OID" class="form-control" />
+                    <span asp-validation-for="SET_OID" danger=""></span>
+                </div>
+                <div class="col-sm-3">
+                    <input asp-for="SET_Type" class="form-control" />
+                    <span asp-validation-for="SET_Type" danger=""></span>
+                </div>
+                <div class="col-sm-3">
+                    <input asp-for="SET_Value" class="form-control" />
+                    <span asp-validation-for="SET_Value" danger=""></span>
+                </div>
+                <div class="col-sm-2">
+                    <input type="submit" value="SET" class="btn" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-1">
+        
+        @if (Model.Result != null)
+        {
+            @((Model.Result.Value) ? "SET successful" : "SET unsuccessful")
+        }
+    </div>
+</div>
+
