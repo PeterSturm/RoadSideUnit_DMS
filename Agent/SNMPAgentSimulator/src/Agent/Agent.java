@@ -284,9 +284,11 @@ public class Agent  extends BaseAgent {
         };
         MOTableIndex indexDef = new MOTableIndex(subIndexes, false);
 
-        MOColumn[] columns = new MOColumn[1];
+        MOColumn[] columns = new MOColumn[2];
+        //MOColumn[] columns = new MOColumn[1];
         int columnIndex = 0;
         columns[columnIndex++] = DefaultMOFactory.getInstance().createColumn(8, SMIConstants.SYNTAX_INTEGER32, MOAccessImpl.ACCESS_READ_WRITE);
+        columns[columnIndex++] = DefaultMOFactory.getInstance().createColumn(9, SMIConstants.SYNTAX_OCTET_STRING, MOAccessImpl.ACCESS_READ_WRITE);
 
         DefaultMOTable table = new DefaultMOTable(new OID("0.1.15628.4.1"), indexDef, columns);
         // <-- Create table
@@ -302,12 +304,14 @@ public class Agent  extends BaseAgent {
                 case Integer32:
                     model.addRow(new DefaultMOMutableRow2PC(new OID(obj.Id), new Variable[]
                             {
-                                    new Integer32((int)obj.value)
+                                    new Integer32((int)obj.value),
+                                    new OctetString("")
                             }));
                     break;
                 case OctetString:
                     model.addRow(new DefaultMOMutableRow2PC(new OID(obj.Id), new Variable[]
                             {
+                                    new Integer32(0),
                                     new OctetString((String) obj.value)
                             }));
                     break;
