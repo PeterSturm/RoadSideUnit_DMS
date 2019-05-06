@@ -26,8 +26,4 @@
     <ProjectReference Include="..\SNMPManager.Persistence\SNMPManager.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>
