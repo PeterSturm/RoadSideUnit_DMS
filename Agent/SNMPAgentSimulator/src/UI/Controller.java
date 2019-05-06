@@ -87,11 +87,11 @@ public class Controller {
         log.appendText("Finished loading rsus\n");
 
         txtPeriodicity.setOnAction(changePeriodicity);
-        txtPeriodicity.setText("3000");
+        txtPeriodicity.setText("10000");
         txtminVariance.setOnAction(changeMinVariance);
-        txtminVariance.setText("-500");
+        txtminVariance.setText("-1500");
         txtmaxVariance.setOnAction(changeMaxVariance);
-        txtmaxVariance.setText("500");
+        txtmaxVariance.setText("1500");
 
         trapSender = new TrapSender(rsus, log, Integer.parseInt(txtPeriodicity.getText()), Integer.parseInt(txtminVariance.getText()), Integer.parseInt(txtmaxVariance.getText()));
         trapSenderThread = new Thread(trapSender);
