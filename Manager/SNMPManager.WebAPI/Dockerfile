@@ -22,6 +22,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
 
-RUN dotnet ef database update
-
 ENTRYPOINT ["dotnet", "SNMPManager.WebAPI.dll"]
