@@ -15,15 +15,15 @@ namespace DashboardWebApp.Models
         public string Type { get; set; }
         public string Message { get; set; }
 
-        public static TrapLog Parse(TrapLogDto mld, Manager manager)
+        public static TrapLog Parse(TrapLogDto tld, Manager manager)
         {
             return new TrapLog
             {
                 ManagerId = manager.Id,
-                SourceRsuId = mld.SourceRsu,
-                TimeStamp = mld.TimeStamp,
-                Type = mld.Type,
-                Message = mld.Message
+                SourceRsuId = tld.SourceRsu,
+                TimeStamp = tld.TimeStamp,
+                Type = tld.Type,
+                Message = tld.Message
             };
         }
     }

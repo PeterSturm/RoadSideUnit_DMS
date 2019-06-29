@@ -43,10 +43,37 @@ public class Controller {
     private void initialize()
     {
         log.appendText("Start load rsu agent from file: " + "rsus.txt\n");
+        LoadRSUs(); // Load RSUs from a file
+        log.appendText("Finished loading rsus\n");
+
+        // Create input textboxes to controll Trap Message sender timing
+        createTrapMesseageConfControllers();
+
+        // Config and Start a TrapSender object that handles the RSUs Trap message sending
+        startTrapMessageSenderThread();
+    }
+
+    private void startTrapMessageSenderThread() {
+        trapSender = new TrapSender(rsus, log, Integer.parseInt(txtPeriodicity.getText()), Integer.parseInt(txtminVariance.getText()), Integer.parseInt(txtmaxVariance.getText()));
+        trapSenderThread = new Thread(trapSender);
+        trapSenderThread.start();
+    }
+
+    private void createTrapMesseageConfControllers() {
+        txtPeriodicity.setOnAction(changePeriodicity);
+        txtPeriodicity.setText("10000");
+        txtminVariance.setOnAction(changeMinVariance);
+        txtminVariance.setText("-1500");
+        txtmaxVariance.setOnAction(changeMaxVariance);
+        txtmaxVariance.setText("1500");
+    }
+
+    private void LoadRSUs()
+    {
         rsus = RSUAgentLoader.Load("rsus.txt");
         for (int i = 0; i < RSUAgentLoader.processedLines.size(); i++) {
             if (!RSUAgentLoader.processedLines.get(i))
-            log.appendText(String.format("Line %d failed to load\n", i));
+                log.appendText(String.format("Line %d failed to load\n", i));
         }
 
         Button btnStartAll = new Button("Start All");
@@ -83,20 +110,6 @@ public class Controller {
 
             log.appendText("Loaded " + rsus.get(i).IP + "/" + rsus.get(i).Port + " RSU agent\n");
         }
-
-        log.appendText("Finished loading rsus\n");
-
-        txtPeriodicity.setOnAction(changePeriodicity);
-        txtPeriodicity.setText("10000");
-        txtminVariance.setOnAction(changeMinVariance);
-        txtminVariance.setText("-1500");
-        txtmaxVariance.setOnAction(changeMaxVariance);
-        txtmaxVariance.setText("1500");
-
-        trapSender = new TrapSender(rsus, log, Integer.parseInt(txtPeriodicity.getText()), Integer.parseInt(txtminVariance.getText()), Integer.parseInt(txtmaxVariance.getText()));
-        trapSenderThread = new Thread(trapSender);
-        trapSenderThread.start();
-
     }
 
     public void shutdown()

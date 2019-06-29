@@ -10,17 +10,17 @@ namespace SNMPManager.Infrastructure
 {
     public class ManagerLogger : ILogger
     {
-        private IContextService _SNMPManagerServices;
+        private IContextService _contextService;
 
-        public ManagerLogger(IContextService SNMPManagerServices)
+        public ManagerLogger(IContextService ContextService)
         {
-            _SNMPManagerServices = SNMPManagerServices;
+            _contextService = ContextService;
         }
         public void Log(LogType level, string message)
         {
             ManagerLog log = new ManagerLog(DateTime.UtcNow, level, message);
 
-            _SNMPManagerServices.AddManagerLog(log);
+            _contextService.AddManagerLog(log);
         }
 
         public void LogAPICall(string userName, ManagerOperation managerOperation)

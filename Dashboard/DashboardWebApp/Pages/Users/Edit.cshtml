@@ -6,7 +6,7 @@
 }
 
 <h1>Edit</h1>
-<h2>@Model.User.UserName</h2>
+<h2>@Model.UserView.UserName</h2>
 <br />
 <h4>Manager Users</h4>
 <br />
@@ -21,19 +21,19 @@
 <br />
 <div class="row">
     <div class="col-lg-12">
-        @if (Model.User.ManagerUsers != null && Model.User.ManagerUsers.Count != 0)
+        @if (Model.UserView.ManagerUsers != null && Model.UserView.ManagerUsers.Count != 0)
         {
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
-                        <th><label asp-for="@Model.User.ManagerUsers[0].Manager"></label></th>
-                        <th><label asp-for="@Model.User.ManagerUsers[0].Manager.IP"></label></th>
-                        <th><label asp-for="@Model.User.ManagerUsers[0].Name"></label></th>
-                        <th><label asp-for="@Model.User.ManagerUsers[0].Role"></label></th>
+                        <th><label asp-for="@Model.UserView.ManagerUsers[0].Manager"></label></th>
+                        <th><label asp-for="@Model.UserView.ManagerUsers[0].Manager.IP"></label></th>
+                        <th><label asp-for="@Model.UserView.ManagerUsers[0].Name"></label></th>
+                        <th><label asp-for="@Model.UserView.ManagerUsers[0].Role"></label></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var manageruser in Model.User.ManagerUsers)
+                    @foreach (var manageruser in Model.UserView.ManagerUsers)
                     {
                         <tr>
                             <td>@manageruser.Manager.Name</td>

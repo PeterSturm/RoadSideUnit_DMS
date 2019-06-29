@@ -9,18 +9,19 @@ using SNMPManager.Core.Exceptions;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore;
 using SNMPManager.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SNMPManager.Persistence
 {
     public class ContextService : IContextService 
     {
         private readonly ManagerContext _managerContext;
-        private readonly ManagerLogger _logger;
+        private readonly IServiceProvider _serviceProvider;
 
-        public ContextService(ManagerContext managerContext)
+        public ContextService(ManagerContext managerContext, IServiceProvider serviceProvider)
         {
             _managerContext = managerContext;
-            _logger = new ManagerLogger(this);
+            _serviceProvider = serviceProvider;
         }
 
 
@@ -127,37 +128,47 @@ namespace SNMPManager.Persistence
 
         public User AuthenticateUser(string userName, string token)
         {
-            var user = GetUser(userName);
-            if (user == null)
+            using (var scope = _serviceProvider.CreateScope())
             {
-                _logger.LogAuthentication(userName, false);
-                return null;
-            }
+                var loggerService = scope.ServiceProvider.GetRequiredService<ILogger>();
 
-            if (user.Token != token)
-            {
-                _logger.LogAuthentication(userName, false);
-                throw new AuthenticationFailed(userName);
-            }
+                var user = GetUser(userName);
+                if (user == null)
+                {
+                    loggerService.LogAuthentication(userName, false);
+                    return null;
+                }
 
-            _logger.LogAuthentication(userName, true);
-            return user;
+                if (user.Token != token)
+                {
+                    loggerService.LogAuthentication(userName, false);
+                    throw new AuthenticationFailed(userName);
+                }
+
+                loggerService.LogAuthentication(userName, true);
+                return user;
+            }
         }
 
         public bool AuthorizeUser(string userName, string token)
         {
-            var user = AuthenticateUser(userName, token);
-            if (user == null)
+            using (var scope = _serviceProvider.CreateScope())
             {
-                _logger.LogAuthorization(userName, false);
-                return false;
+                var loggerService = scope.ServiceProvider.GetRequiredService<ILogger>();
+
+                var user = AuthenticateUser(userName, token);
+                if (user == null)
+                {
+                    loggerService.LogAuthorization(userName, false);
+                    return false;
+                }
+
+                // TODO Authorization with Roles and ManagerOperations
+
+
+                loggerService.LogAuthorization(userName, true);
+                return true;
             }
-
-            // TODO Authorization with Roles and ManagerOperations
-
-
-            _logger.LogAuthorization(userName, true);
-            return true;
         }
         #endregion
 
@@ -208,33 +219,6 @@ namespace SNMPManager.Persistence
         public ICollection<Role> GetRole()
         {
             return _managerContext.Roles.ToArray();
-        }
-        #endregion
-
-        #region Token service functions
-        public void AddToken(Token token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Token GetToken(int tokenId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICollection<Token> GetToken()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateToken(Token token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveToken(int tokenId)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

@@ -33,13 +33,6 @@ namespace SNMPManager.Core.Interfaces
         Role GetRole(string name);
         ICollection<Role> GetRole();
 
-        // Token service functions
-        void AddToken(Token token);
-        void RemoveToken(int tokenId);
-        void UpdateToken(Token token);
-        Token GetToken(int tokenId);
-        ICollection<Token> GetToken();
-
         // SNMP manager settings service function
         bool AddManagerSettings(ManagerSettings settings);
         bool UpdateManagerSettings(ManagerSettings settings);

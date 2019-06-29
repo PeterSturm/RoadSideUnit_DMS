@@ -7,11 +7,10 @@ using SNMPManager.Core.Entities;
 using SNMPManager.Core.Enumerations;
 using SNMPManager.Core.Interfaces;
 using SNMPManager.Core.Exceptions;
-using SNMPManager.WebAPI.Controllers;
 using Common.DTO;
 using System.Net;
 
-namespace SNMPManager.Controllers
+namespace SNMPManager.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

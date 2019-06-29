@@ -16,9 +16,9 @@ namespace SNMPManager.WebAPI.Controllers
         protected readonly IContextService _contextService;
         protected readonly ILogger _logger;
 
-        public BaseController(IContextService SNMPManagerService, ILogger logger)
+        public BaseController(IContextService ContextService, ILogger logger)
         {
-            _contextService = SNMPManagerService;
+            _contextService = ContextService;
             _logger = logger;
         }
 

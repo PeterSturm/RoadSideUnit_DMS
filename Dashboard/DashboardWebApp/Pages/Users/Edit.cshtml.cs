@@ -23,7 +23,7 @@ namespace DashboardWebApp.Pages.Users
         }
 
         [BindProperty]
-        public UserViewModel User { get; set; }
+        public UserViewModel UserView { get; set; }
 
         [BindProperty]
         public AddManagerUserModel AddManagerUser { get; set; }
@@ -44,7 +44,7 @@ namespace DashboardWebApp.Pages.Users
             if (user == null)
                 return NotFound($"User not found with id {id}");
 
-            User = new UserViewModel
+            UserView = new UserViewModel
             {
                 Id = user.Id,
                 UserName = user.UserName
@@ -58,7 +58,7 @@ namespace DashboardWebApp.Pages.Users
             if (usermanagerusers != null)
             {
                 var managerusers = usermanagerusers.Select(umu => umu.ManagerUser).ToList();
-                User.ManagerUsers = managerusers;
+                UserView.ManagerUsers = managerusers;
             }
 
             AddManagerUser = InitAddManagerUserModel();
@@ -75,12 +75,12 @@ namespace DashboardWebApp.Pages.Users
             UserManagerUser userManagerUser = new UserManagerUser();
             userManagerUser.ManagerUserManagerId = AddManagerUser.ManagerUserManagerId;
             userManagerUser.ManagerUserName = manageruserName.Name;
-            userManagerUser.UserId = User.Id;
+            userManagerUser.UserId = UserView.Id;
 
             _applicationDbContext.UserManagerUsers.Add(userManagerUser);
             await _applicationDbContext.SaveChangesAsync();
 
-            return RedirectToPage("./Edit", new { id = User.Id});
+            return RedirectToPage("./Edit", new { id = UserView.Id});
         }
 
         private AddManagerUserModel InitAddManagerUserModel()

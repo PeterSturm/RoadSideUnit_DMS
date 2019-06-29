@@ -18,7 +18,7 @@ using SNMPManager.Infrastructure;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.Extensions.Hosting;
 
-namespace SNMPManager
+namespace SNMPManager.WebAPI
 {
     public class Startup
     {
@@ -34,11 +34,10 @@ namespace SNMPManager
         {
             // Configure Entity Framework with use of postgreSQL
             services.AddEntityFrameworkNpgsql()
-                    //.AddDbContext<ManagerContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("DB"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
                     .AddDbContext<ManagerContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ManagerDatabase"), b => b.MigrationsAssembly("SNMPManager.WebAPI")))
                     .BuildServiceProvider();
 
-            // Inject Custom logger and Databse handler services
+            // Inject Custom logger, Database handler, SNMP functinality services
             services.AddScoped<Core.Interfaces.ILogger, ManagerLogger>();
             services.AddScoped<IContextService, ContextService>();
             services.AddScoped<ISNMPManagerService, SNMPManagerService>();
@@ -56,6 +55,9 @@ namespace SNMPManager
                         , Configuration.GetValue<int>("RSUHealthChecker:Period")
                         , Configuration.GetValue<int>("RSUHealthChecker:HealthTreshold")));
 
+            // Register the MVC services
+            // and configure it to use JSON serialization
+            // for the request/response body
             services.AddMvc()
                 .AddJsonOptions(options =>
                 {
@@ -72,33 +74,41 @@ namespace SNMPManager
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IServiceProvider service)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+// This method gets called by the runtime.
+// Use this method to configure the HTTP request pipeline.
+public void Configure(IApplicationBuilder app
+                        , Microsoft
+                            .AspNetCore
+                            .Hosting.IHostingEnvironment env
+                        , IServiceProvider service)
+{
+    if (env.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+    }
+    else
+    {
+        // The default HSTS value is 30 days.
+        // You may want to change this for production scenarios,
+        // see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SNMPManager API");
-            });
+    // Enable middleware to serve generated Swagger as a JSON endpoint.
+    app.UseSwagger();
+    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+    // specifying the Swagger JSON endpoint.
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json"
+                          , "SNMPManager API");
+    });
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
+    app.UseHttpsRedirection();
+    app.UseMvc();
 
-            CreateDefaultUsers(service).Wait();
-        }
+    CreateDefaultUsers(service).Wait();
+}
 
         private async Task CreateDefaultUsers(IServiceProvider serviceProvider)
         {

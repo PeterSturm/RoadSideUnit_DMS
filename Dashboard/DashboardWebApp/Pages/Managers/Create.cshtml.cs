@@ -43,6 +43,8 @@ namespace DashboardWebApp.Pages.Managers
             var managerUsers = await _userService.GetAsync(new ManagerUser(manager));
             if (managerUsers != null)
                 _applicationDbContext.ManagerUsers.AddRange(managerUsers);
+            else
+                return Page();
 
             manager.Users = managerUsers?.ToList();
 

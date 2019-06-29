@@ -3,6 +3,7 @@ package Agent;
 import org.apache.commons.net.telnet.TelnetClient;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.ConnectException;
 
 //http://twit88.com/blog/2007/12/22/java-writing-an-automated-telnet-client/
 
@@ -10,26 +11,10 @@ public class TelnetAPI {
     private TelnetClient telnet;
     private InputStream input;
     private PrintStream output;
-    private String prompt = "#";
+    private String prompt;
 
-    /*public static void main(String[] args) {
-        TelnetAPI telnet = new TelnetAPI("192.168.0.178", "sturm", "Pass01", "$");
-        System.out.println(telnet.executeCommand("ls"));
-        try
-        {
-            System.console().readLine();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            telnet.disconnect();
-        }
-    }*/
 
-    public TelnetAPI(String server, String user, String password, String prompt)
+    public TelnetAPI(String server, String user, String password, String prompt) throws ConnectException
     {
         telnet = new TelnetClient();
         try
@@ -53,6 +38,7 @@ public class TelnetAPI {
         catch (Exception e)
         {
             e.printStackTrace();
+            throw new ConnectException();
         }
     }
 

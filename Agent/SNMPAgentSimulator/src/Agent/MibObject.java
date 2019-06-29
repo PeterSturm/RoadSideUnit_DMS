@@ -6,12 +6,12 @@ public class MibObject {
 
     public String Id;
     public SNMPType Type;
-    public Object value;
+    public Object Value;
 
     public MibObject(String id, SNMPType type, Object value)
     {
         Id = id;
         Type = type;
-        this.value = value;
+        this.Value = value;
     }
 }

@@ -4,6 +4,8 @@ import com.sun.javafx.tk.Toolkit;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
+
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -49,37 +51,54 @@ public class TrapSender extends Task {
     @Override
     protected Void call() {
         Random rnd = new Random();
-        while(running)
-        {
-            try
-            {
+        while(running) {
+            try {
+                checkRSUs();
+
                 for (RSUAgent rsu : rsuAgents)
                 {
-                    if (rsu.SendTrap)
-                    {
+                    if (rsu.SendTrap) {
                         rsu.agent.sendTrap();
+
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 log.appendText("Trap sent: " + rsu.IP + "/" + rsu.Port + " --> " + rsu.TrapAddress + "\n");
                             }
                         });
+
                         Thread.sleep(periodicity + (rnd.nextInt((maxVariance - minVarinace) + 1) + minVarinace));
                     }
                 }
-
-                //Thread.sleep(periodicity);
             }
-            catch (InterruptedException e)
-            {
+            catch (InterruptedException e) {
                 if (isCancelled())
                     running = false;
                 else
                     e.printStackTrace();
             }
-
         }
         return null;
+    }
+
+    private void checkRSUs()
+    {
+        for (RSUAgent rsu : rsuAgents)
+        {
+            try {
+                if(rsu.Real) {
+                    InetAddress inetAddress = InetAddress.getByName(rsu.TelnetIP);
+                    if (!inetAddress.isReachable(500)) {
+                        rsu.SendTrap = false;
+                        rsu.stopAgent();
+                    }
+                }
+            }
+            catch(Exception e) {
+               rsu.SendTrap = false;
+               rsu.stopAgent();
+            }
+        }
     }
 
     public void shutdown()
