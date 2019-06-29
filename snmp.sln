@@ -27,6 +27,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E5B9E6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "Common\DTO\DTO.csproj", "{B50F1D11-1AF4-45CA-B25D-09E14980C802}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{272AC85D-3D0E-4069-9C54-3B7AC26D4319}"
+	ProjectSection(SolutionItems) = preProject
+		docs\snmp_dms_architecture.jpg = docs\snmp_dms_architecture.jpg
+		docs\WebAPI_Core_diagram_croped.jpg = docs\WebAPI_Core_diagram_croped.jpg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
